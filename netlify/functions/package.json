@@ -1,0 +1,17 @@
+{
+  "name": "ai-knowledge-companion-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for AI Knowledge Companion",
+  "main": "index.js",
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "openai": "^4.20.1",
+    "pdfjs-dist": "^4.0.379"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

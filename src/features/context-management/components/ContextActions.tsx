@@ -1,0 +1,48 @@
+'use client';
+
+import { Upload, Link as LinkIcon } from 'lucide-react';
+
+interface ContextActionsProps {
+  onFileUploadClick: () => void;
+  onURLInputClick: () => void;
+}
+
+export function ContextActions({ onFileUploadClick, onURLInputClick }: ContextActionsProps) {
+  return (
+    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <button
+        onClick={onFileUploadClick}
+        className="flex items-center space-x-6 p-8 bg-white rounded-2xl border-2 border-neutralharmony-primary-300 hover:shadow-xl transition-all duration-300 group hover:border-neutralharmony-primary-400 hover:scale-105"
+      >
+        <div className="w-20 h-20 bg-gradient-to-br from-neutralharmony-primary-400 to-neutralharmony-primary-500 rounded-2xl flex items-center justify-center group-hover:from-neutralharmony-primary-500 group-hover:to-neutralharmony-primary-600 transition-all duration-300 shadow-lg">
+          <Upload className="w-10 h-10 text-neutralharmony-background-50" />
+        </div>
+        <div className="text-left">
+          <h3 className="text-2xl font-bold text-neutralharmony-primary-900 mb-3">
+            Upload Documents
+          </h3>
+          <p className="text-neutralharmony-primary-700 text-base">
+            PDF, DOCX, TXT, and images
+          </p>
+        </div>
+      </button>
+
+      <button
+        onClick={onURLInputClick}
+        className="flex items-center space-x-6 p-8 bg-white rounded-2xl border-2 border-neutralharmony-primary-300 hover:shadow-xl transition-all duration-300 group hover:border-neutralharmony-primary-400 hover:scale-105"
+      >
+        <div className="w-20 h-20 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-2xl flex items-center justify-center group-hover:from-neutralharmony-tertiary-500 group-hover:to-neutralharmony-tertiary-600 transition-all duration-300 shadow-lg">
+          <LinkIcon className="w-10 h-10 text-neutralharmony-primary-900" />
+        </div>
+        <div className="text-left">
+          <h3 className="text-2xl font-bold text-neutralharmony-primary-900 mb-3">
+            Add URLs
+          </h3>
+          <p className="text-neutralharmony-primary-700 text-base">
+            Extract content from web pages
+          </p>
+        </div>
+      </button>
+    </div>
+  );
+}
