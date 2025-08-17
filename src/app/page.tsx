@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FileUpload } from '@/features/context-management/components/FileUpload';
-import { URLInput } from '@/features/context-management/components/URLInput';
-import { BriefingGenerator } from '@/features/briefing/components/BriefingGenerator';
-import { ChatInterface } from '@/features/chat/components/ChatInterface';
+import { FileUploadModal } from '@/features/context-management/components/FileUploadModal';
+import { URLInputModal } from '@/features/context-management/components/URLInputModal';
+import { BriefingGeneratorModal } from '@/features/briefing/components/BriefingGeneratorModal';
+import { ChatInterfaceModal } from '@/features/chat/components/ChatInterfaceModal';
 import { AboutModal } from '@/features/navigation';
 import { SettingsModal } from '@/features/navigation';
-import { CollectionsModal } from '@/features/context-management/components/CollectionsModal';
+import { CollectionsManagementModal } from '@/features/navigation/components/CollectionsManagementModal';
 import { FileProcessingResult } from '@/types';
 
 // Feature-based imports
@@ -87,9 +87,9 @@ export default function AppPage() {
           {activeTab === 'manage-context' && (
             <ContextManagementTab
               processedContent={processedContent}
-              onFileUploadClick={() => setShowFileUpload(true)}
-              onURLInputClick={() => setShowURLInput(true)}
-              onRemoveContent={handleRemoveContent}
+              onFileUploadClickAction={() => setShowFileUpload(true)}
+              onURLInputClickAction={() => setShowURLInput(true)}
+              onRemoveContentAction={handleRemoveContent}
             />
           )}
 
@@ -115,32 +115,32 @@ export default function AppPage() {
 
       {/* Modals */}
       {showFileUpload && (
-        <FileUpload
-          onFileProcessed={handleFileProcessed}
-          onClose={() => setShowFileUpload(false)}
+        <FileUploadModal
+          onFileProcessedAction={handleFileProcessed}
+          onCloseAction={() => setShowFileUpload(false)}
           existingContent={processedContent}
         />
       )}
 
       {showURLInput && (
-        <URLInput
-          onURLProcessed={handleURLProcessed}
-          onClose={() => setShowURLInput(false)}
+        <URLInputModal
+          onURLProcessedAction={handleURLProcessed}
+          onCloseAction={() => setShowURLInput(false)}
           existingContent={processedContent}
         />
       )}
 
       {showChatInterface && (
-        <ChatInterface
+        <ChatInterfaceModal
           content={processedContent}
           onClose={() => setShowChatInterface(false)}
         />
       )}
 
       {showBriefingGenerator && (
-        <BriefingGenerator
+        <BriefingGeneratorModal
           content={processedContent}
-          onClose={() => setShowBriefingGenerator(false)}
+          onCloseAction={() => setShowBriefingGenerator(false)}
         />
       )}
 
@@ -150,7 +150,7 @@ export default function AppPage() {
       )}
 
       {activeNavTab === 'collections' && (
-        <CollectionsModal onClose={() => setActiveNavTab(null)} />
+        <CollectionsManagementModal onCloseAction={() => setActiveNavTab(null)} />
       )}
 
       {activeNavTab === 'settings' && (

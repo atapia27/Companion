@@ -2,14 +2,14 @@
 
 import { FileText, Link as LinkIcon, X } from 'lucide-react';
 import { FileProcessingResult } from '@/types';
-import { getFileTypeIcon } from '../utils/fileTypeUtils';
+import { getFileTypeIcon } from '../utils';
 
 interface ContentDisplayProps {
   processedContent: FileProcessingResult[];
-  onRemoveContent: (index: number) => void;
+  onRemoveContentAction: (index: number) => void;
 }
 
-export function ContentDisplay({ processedContent, onRemoveContent }: ContentDisplayProps) {
+export function ContentDisplay({ processedContent, onRemoveContentAction }: ContentDisplayProps) {
   const files = processedContent.filter(content => content.metadata.filename);
   const urls = processedContent.filter(content => !content.metadata.filename);
 
@@ -57,7 +57,7 @@ export function ContentDisplay({ processedContent, onRemoveContent }: ContentDis
                           </div>
                         </div>
                         <button
-                          onClick={() => onRemoveContent(originalIndex)}
+                          onClick={() => onRemoveContentAction(originalIndex)}
                           className="ml-3 p-2 text-neutralharmony-contrast-600 hover:text-neutralharmony-contrast-700 hover:bg-neutralharmony-contrast-100 rounded-lg transition-all duration-200"
                         >
                           <X className="w-4 h-4" />
@@ -99,7 +99,7 @@ export function ContentDisplay({ processedContent, onRemoveContent }: ContentDis
                           </p>
                         </div>
                         <button
-                          onClick={() => onRemoveContent(originalIndex)}
+                          onClick={() => onRemoveContentAction(originalIndex)}
                           className="ml-3 p-2 text-neutralharmony-contrast-600 hover:text-neutralharmony-contrast-700 hover:bg-neutralharmony-contrast-100 rounded-lg transition-all duration-200"
                         >
                           <X className="w-4 h-4" />

@@ -10,12 +10,12 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { getPreferredAIModel } from '@/lib/utils';
 
-interface BriefingGeneratorProps {
+interface BriefingGeneratorModalProps {
   content: FileProcessingResult[];
-  onClose: () => void;
+  onCloseAction: () => void;
 }
 
-export function BriefingGenerator({ content, onClose }: BriefingGeneratorProps) {
+export function BriefingGeneratorModal({ content, onCloseAction }: BriefingGeneratorModalProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [briefing, setBriefing] = useState<string>('');
   const [briefingTitle, setBriefingTitle] = useState('');
@@ -128,7 +128,7 @@ ${briefing}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-freshgreens-primary-900 dark:text-white">Generate Briefing</h2>
           <Button
-            onClick={onClose}
+            onClick={onCloseAction}
             variant="ghost"
             size="sm"
             icon={<X className="w-5 h-5" />}

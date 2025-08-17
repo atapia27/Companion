@@ -6,16 +6,16 @@ import { ContentDisplay } from './ContentDisplay';
 
 interface ContextManagementTabProps {
   processedContent: FileProcessingResult[];
-  onFileUploadClick: () => void;
-  onURLInputClick: () => void;
-  onRemoveContent: (index: number) => void;
+  onFileUploadClickAction: () => void;
+  onURLInputClickAction: () => void;
+  onRemoveContentAction: (index: number) => void;
 }
 
 export function ContextManagementTab({
   processedContent,
-  onFileUploadClick,
-  onURLInputClick,
-  onRemoveContent
+  onFileUploadClickAction,
+  onURLInputClickAction,
+  onRemoveContentAction
 }: ContextManagementTabProps) {
   return (
     <div className="space-y-8">
@@ -30,14 +30,14 @@ export function ContextManagementTab({
 
       {/* Action Buttons */}
       <ContextActions
-        onFileUploadClick={onFileUploadClick}
-        onURLInputClick={onURLInputClick}
+        onFileUploadClickAction={onFileUploadClickAction}
+        onURLInputClickAction={onURLInputClickAction}
       />
 
       {/* Current Context */}
       <ContentDisplay
         processedContent={processedContent}
-        onRemoveContent={onRemoveContent}
+        onRemoveContentAction={onRemoveContentAction}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { getPreferredAIModel } from '@/lib/utils';
 
-interface ChatInterfaceProps {
+interface ChatInterfaceModalProps {
   content: FileProcessingResult[];
   onClose: () => void;
 }
@@ -20,7 +20,7 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-export function ChatInterface({ content, onClose }: ChatInterfaceProps) {
+export function ChatInterfaceModal({ content, onClose }: ChatInterfaceModalProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);

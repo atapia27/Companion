@@ -1,3 +1,3 @@
 export { BriefingTab } from './components/BriefingTab';
-export { BriefingGenerator } from './components/BriefingGenerator';
+export { BriefingGeneratorModal } from './components/BriefingGeneratorModal';
 

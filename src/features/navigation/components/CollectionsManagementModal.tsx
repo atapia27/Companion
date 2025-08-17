@@ -1,29 +1,14 @@
 'use client';
 
 import { X, Folder, Plus, Trash2, Edit3 } from 'lucide-react';
-import { useState } from 'react';
+import { useCollections } from '../../context-management/hooks';
 
-interface CollectionsModalProps {
-  onClose: () => void;
+interface CollectionsManagementModalProps {
+  onCloseAction: () => void;
 }
 
-export function CollectionsModal({ onClose }: CollectionsModalProps) {
-  const [collections] = useState([
-    {
-      id: '1',
-      name: 'Research Project Alpha',
-      description: 'Documents and URLs for the main research project',
-      documentCount: 5,
-      lastUpdated: '2024-01-15'
-    },
-    {
-      id: '2',
-      name: 'Competitor Analysis',
-      description: 'Analysis of competitor products and strategies',
-      documentCount: 3,
-      lastUpdated: '2024-01-10'
-    }
-  ]);
+export function CollectionsManagementModal({ onCloseAction }: CollectionsManagementModalProps) {
+  const { collections } = useCollections();
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -31,7 +16,7 @@ export function CollectionsModal({ onClose }: CollectionsModalProps) {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-foreground">Collections</h2>
           <button
-            onClick={onClose}
+            onClick={onCloseAction}
             className="p-2 hover:bg-muted rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />

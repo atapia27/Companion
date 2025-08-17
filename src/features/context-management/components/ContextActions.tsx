@@ -3,15 +3,15 @@
 import { Upload, Link as LinkIcon } from 'lucide-react';
 
 interface ContextActionsProps {
-  onFileUploadClick: () => void;
-  onURLInputClick: () => void;
+  onFileUploadClickAction: () => void;
+  onURLInputClickAction: () => void;
 }
 
-export function ContextActions({ onFileUploadClick, onURLInputClick }: ContextActionsProps) {
+export function ContextActions({ onFileUploadClickAction, onURLInputClickAction }: ContextActionsProps) {
   return (
     <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
       <button
-        onClick={onFileUploadClick}
+        onClick={onFileUploadClickAction}
         className="flex items-center space-x-6 p-8 bg-white rounded-2xl border-2 border-neutralharmony-primary-300 hover:shadow-xl transition-all duration-300 group hover:border-neutralharmony-primary-400 hover:scale-105"
       >
         <div className="w-20 h-20 bg-gradient-to-br from-neutralharmony-primary-400 to-neutralharmony-primary-500 rounded-2xl flex items-center justify-center group-hover:from-neutralharmony-primary-500 group-hover:to-neutralharmony-primary-600 transition-all duration-300 shadow-lg">
@@ -28,7 +28,7 @@ export function ContextActions({ onFileUploadClick, onURLInputClick }: ContextAc
       </button>
 
       <button
-        onClick={onURLInputClick}
+        onClick={onURLInputClickAction}
         className="flex items-center space-x-6 p-8 bg-white rounded-2xl border-2 border-neutralharmony-primary-300 hover:shadow-xl transition-all duration-300 group hover:border-neutralharmony-primary-400 hover:scale-105"
       >
         <div className="w-20 h-20 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-2xl flex items-center justify-center group-hover:from-neutralharmony-tertiary-500 group-hover:to-neutralharmony-tertiary-600 transition-all duration-300 shadow-lg">
