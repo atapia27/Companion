@@ -6,6 +6,11 @@ interface ChatMessageProps {
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
+  // Don't render error messages here - they'll be handled by ChatErrorMessage component
+  if (message.type === 'error') {
+    return null;
+  }
+
   return (
     <div
       className={`flex gap-3 ${

@@ -24,11 +24,17 @@ export function BriefingTab({
   onSwitchToContext 
 }: BriefingTabProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState<string | null>(null);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const { model, showModelSelector, setShowModelSelector, handleModelChange } = useModelSelector();
 
   const handleGenerateBriefing = async () => {
     // This will be handled by the GenerateBriefingModal
+    setShowGenerateModal(true);
+  };
+
+  const handleRetryGeneration = () => {
+    setGenerationError(null);
     setShowGenerateModal(true);
   };
 
@@ -52,7 +58,10 @@ export function BriefingTab({
 
       <BriefingList 
         briefings={briefings} 
-        onDeleteBriefing={onDeleteBriefing} 
+        onDeleteBriefing={onDeleteBriefing}
+        isGenerating={isGenerating}
+        generationError={generationError}
+        onRetryGeneration={handleRetryGeneration}
       />
 
       {/* Generate Briefing Modal */}
@@ -62,6 +71,7 @@ export function BriefingTab({
           onClose={() => setShowGenerateModal(false)}
           onAddBriefing={onAddBriefing}
           setIsGenerating={setIsGenerating}
+          setGenerationError={setGenerationError}
           model={model}
         />
       )}

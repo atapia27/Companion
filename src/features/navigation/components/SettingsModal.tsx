@@ -1,6 +1,6 @@
 'use client';
 
-import { X, Settings as SettingsIcon, Brain, Moon, Sun, Monitor } from 'lucide-react';
+import { X, Settings as SettingsIcon, Brain, Moon, Sun, Monitor, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -27,157 +27,99 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
     }
   }, []);
 
-  const handleSaveSettings = () => {
-    // Save model preference
-    localStorage.setItem('ai-model-preference', model);
-    
-    // Save theme preference
-    localStorage.setItem('theme-preference', theme);
-    
-    toast({
-      title: "Settings saved",
-      description: "Your preferences have been saved successfully.",
-    });
-    
-    onClose();
+  const handleModelChange = (newModel: string) => {
+    setModel(newModel);
+    localStorage.setItem('ai-model-preference', newModel);
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-background rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-foreground">Settings</h2>
-                     <Button
-             onClick={onClose}
-             variant="close"
-             size="sm"
-             className="rounded-lg"
-           >
-             <X className="w-5 h-5" />
-           </Button>
+      <div className="bg-white rounded-2xl p-8 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto shadow-2xl border border-neutralharmony-background-200">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold text-neutralharmony-primary-900">Settings</h2>
+          <Button
+            onClick={onClose}
+            variant="close"
+            size="sm"
+            className="rounded-xl"
+          >
+            <X className="w-5 h-5" />
+          </Button>
         </div>
 
-        <div className="space-y-6">
-          {/* AI Model Settings */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <Brain className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">AI Model</h3>
-            </div>
-            <div className="p-4 bg-muted rounded-lg">
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Default Model
-              </label>
-              <select
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Free) - Default</option>
-                <option value="gpt-oss-20b">GPT-OSS-20B (Free)</option>
-                <option value="gpt-4" disabled>GPT-4 (Coming Soon)</option>
-                <option value="claude" disabled>Claude (Coming Soon)</option>
-              </select>
-              <p className="text-xs text-muted-foreground mt-2">
-                Currently using {model === 'gemini-2.0-flash-exp' ? 'Gemini 2.0 Flash' : 'GPT-OSS-20B'} as your preferred model. You can switch between the two free models.
-              </p>
-            </div>
-          </div>
+        <div className="space-y-8">
+                     {/* AI Model Settings */}
+           <div className="space-y-4">
+             <div className="flex items-center space-x-3 mb-2">
+               <div className="w-8 h-8 bg-gradient-to-br from-neutralharmony-primary-400 to-neutralharmony-primary-500 rounded-lg flex items-center justify-center">
+                 <Brain className="w-4 h-4 text-white" />
+               </div>
+               <h3 className="text-xl font-bold text-neutralharmony-primary-900">AI Model</h3>
+             </div>
+             <div className="p-6 bg-white border-2 border-neutralharmony-background-200 rounded-xl">
+               <label className="block text-sm font-semibold text-neutralharmony-primary-700 mb-3">
+                 Default Model
+               </label>
+               <select
+                 value={model}
+                 onChange={(e) => handleModelChange(e.target.value)}
+                 className="w-full px-4 py-3 border-2 border-neutralharmony-background-200 rounded-xl bg-white text-neutralharmony-primary-900 focus:outline-none focus:ring-2 focus:ring-neutralharmony-secondary-400 focus:border-neutralharmony-secondary-400 transition-colors appearance-none bg-no-repeat bg-right pr-10"
+                 style={{
+                   backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                   backgroundPosition: 'right 12px center',
+                   backgroundSize: '16px'
+                 }}
+               >
+                 <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Free) - Default</option>
+                 <option value="gpt-oss-20b">GPT-OSS-20B (Free)</option>
+                 <option value="gpt-4" disabled>GPT-4 (Coming Soon)</option>
+                 <option value="claude" disabled>Claude (Coming Soon)</option>
+               </select>
+               <p className="text-sm text-neutralharmony-primary-600 mt-3 leading-relaxed text-start">
+                 Currently using <span className="font-semibold">{model === 'gemini-2.0-flash-exp' ? 'Gemini 2.0 Flash' : 'GPT-OSS-20B'}</span> as your AI model.
+               </p>
+             </div>
+           </div>
 
           {/* Theme Settings */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <SettingsIcon className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">Appearance</h3>
+              <div className="w-8 h-8 bg-gradient-to-br from-neutralharmony-secondary-400 to-neutralharmony-secondary-500 rounded-lg flex items-center justify-center">
+                <SettingsIcon className="w-4 h-4 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-neutralharmony-primary-900">Appearance</h3>
             </div>
-            <div className="p-4 bg-muted rounded-lg">
-              <label className="block text-sm font-medium text-foreground mb-2">
+            <div className="p-6 bg-white border-2 border-neutralharmony-background-200 rounded-xl">
+              <label className="block text-sm font-semibold text-neutralharmony-primary-700 mb-3">
                 Theme
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => setTheme('light')}
-                  className={`flex items-center justify-center space-x-2 p-3 rounded-lg border transition-colors ${
-                    theme === 'light'
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-background border-input hover:bg-muted'
-                  }`}
-                >
-                  <Sun className="w-4 h-4" />
-                  <span className="text-sm">Light</span>
-                </button>
-                <button
-                  onClick={() => setTheme('dark')}
-                  className={`flex items-center justify-center space-x-2 p-3 rounded-lg border transition-colors ${
-                    theme === 'dark'
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-background border-input hover:bg-muted'
-                  }`}
-                >
-                  <Moon className="w-4 h-4" />
-                  <span className="text-sm">Dark</span>
-                </button>
-                <button
-                  onClick={() => setTheme('system')}
-                  className={`flex items-center justify-center space-x-2 p-3 rounded-lg border transition-colors ${
-                    theme === 'system'
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-background border-input hover:bg-muted'
-                  }`}
-                >
-                  <Monitor className="w-4 h-4" />
-                  <span className="text-sm">System</span>
-                </button>
-              </div>
+                             <div className="grid grid-cols-3 gap-3">
+                 <button
+                   disabled
+                   className="flex items-center justify-center space-x-2 p-4 rounded-xl border-2 bg-gradient-to-r from-neutralharmony-secondary-500 to-neutralharmony-secondary-600 text-white border-neutralharmony-secondary-500 shadow-lg cursor-not-allowed"
+                 >
+                   <Sun className="w-4 h-4 text-white" />
+                   <span className="text-sm font-semibold">Light</span>
+                 </button>
+                 <button
+                   disabled
+                   className="flex items-center justify-center space-x-2 p-4 rounded-xl border-2 bg-neutralharmony-background-100 border-neutralharmony-background-200 text-neutralharmony-primary-400 cursor-not-allowed opacity-50"
+                 >
+                   <Moon className="w-4 h-4" />
+                   <span className="text-sm font-semibold">Dark (WIP)</span>
+                 </button>
+                 <button
+                   disabled
+                   className="flex items-center justify-center space-x-2 p-4 rounded-xl border-2 bg-neutralharmony-background-100 border-neutralharmony-background-200 text-neutralharmony-primary-400 cursor-not-allowed opacity-50"
+                 >
+                   <Monitor className="w-4 h-4" />
+                   <span className="text-sm font-semibold">System (WIP)</span>
+                 </button>
+               </div>
             </div>
           </div>
 
-          {/* Coming Soon Features */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground">Coming Soon</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-4 bg-muted rounded-lg opacity-60">
-                <h4 className="font-semibold text-foreground mb-2">Collections</h4>
-                <p className="text-sm text-muted-foreground">
-                  Organize your documents into themed collections for better organization.
-                </p>
-              </div>
-              <div className="p-4 bg-muted rounded-lg opacity-60">
-                <h4 className="font-semibold text-foreground mb-2">Export Options</h4>
-                <p className="text-sm text-muted-foreground">
-                  Export your briefings and conversations in various formats.
-                </p>
-              </div>
-              <div className="p-4 bg-muted rounded-lg opacity-60">
-                <h4 className="font-semibold text-foreground mb-2">Advanced Models</h4>
-                <p className="text-sm text-muted-foreground">
-                  Access to GPT-4, Claude, and other premium AI models.
-                </p>
-              </div>
-              <div className="p-4 bg-muted rounded-lg opacity-60">
-                <h4 className="font-semibold text-foreground mb-2">Collaboration</h4>
-                <p className="text-sm text-muted-foreground">
-                  Share collections and collaborate with team members.
-                </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Save Button */}
-          <div className="flex justify-end space-x-3 pt-4 border-t">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSaveSettings}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Save Settings
-            </button>
-          </div>
         </div>
       </div>
     </div>

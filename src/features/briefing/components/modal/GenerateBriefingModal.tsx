@@ -13,6 +13,7 @@ interface GenerateBriefingModalProps {
   onClose: () => void;
   onAddBriefing: (briefing: Briefing) => void;
   setIsGenerating: (isGenerating: boolean) => void;
+  setGenerationError: (error: string | null) => void;
   model: string;
 }
 
@@ -21,6 +22,7 @@ export function GenerateBriefingModal({
   onClose, 
   onAddBriefing, 
   setIsGenerating, 
+  setGenerationError,
   model 
 }: GenerateBriefingModalProps) {
   const [isGeneratingLocal, setIsGeneratingLocal] = useState(false);
@@ -32,6 +34,10 @@ export function GenerateBriefingModal({
 
     setIsGeneratingLocal(true);
     setIsGenerating(true);
+    setGenerationError(null);
+    
+    // Close modal immediately to show skeleton in the main view
+    onClose();
 
     try {
       // Create a mock collection ID for this session
@@ -66,12 +72,23 @@ export function GenerateBriefingModal({
       };
 
       onAddBriefing(newBriefing);
-      onClose();
-    } catch (error) {
-      console.error('Error generating briefing:', error);
-    } finally {
       setIsGeneratingLocal(false);
       setIsGenerating(false);
+    } catch (error) {
+      console.error('Error generating briefing:', error);
+      setIsGeneratingLocal(false);
+      setIsGenerating(false);
+      
+      // Set error message for display in skeleton
+      let errorMessage = 'Failed to generate briefing';
+      if (error instanceof Error) {
+        if (error.message.includes('Rate limit exceeded')) {
+          errorMessage = 'API rate limit reached. Please try again later.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      setGenerationError(errorMessage);
     }
   };
 

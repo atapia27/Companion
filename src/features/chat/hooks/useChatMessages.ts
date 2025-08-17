@@ -5,7 +5,7 @@ import { FileProcessingResult } from '@/types';
 
 export interface ChatMessage {
   id: string;
-  type: 'user' | 'assistant';
+  type: 'user' | 'assistant' | 'error';
   content: string;
   timestamp: Date;
 }
@@ -57,6 +57,9 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
     ENABLE_MOCK_CHAT_HISTORY ? mockChatHistory : []
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [lastUserMessage, setLastUserMessage] = useState<string>('');
+  const [lastModel, setLastModel] = useState<string>('');
+  const [showMockData, setShowMockData] = useState(false);
   const { toast } = useToast();
 
   // Auto-scroll to bottom when new messages are added
@@ -87,6 +90,10 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
 
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
+    
+    // Store the message and model for potential retry
+    setLastUserMessage(content.trim());
+    setLastModel(model);
 
     try {
       // Create a mock collection ID for this session
@@ -122,18 +129,57 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error asking question:', error);
-      toast({
-        title: "Error asking question",
-        description: error instanceof Error ? error.message : "Failed to get answer",
-      });
+      
+      // Create error message instead of showing toast
+      let errorMessage = 'Failed to get answer';
+      if (error instanceof Error) {
+        if (error.message.includes('Rate limit exceeded')) {
+          errorMessage = 'API rate limit reached. Please try again later.';
+        } else if (error.message.includes('429')) {
+          errorMessage = 'API rate limit exceeded. Please try again later.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      const errorChatMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'error',
+        content: errorMessage,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, errorChatMessage]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const retryMessage = async (messageId: string) => {
+    if (!lastUserMessage || isLoading) return;
+
+    // Remove the error message
+    setMessages(prev => prev.filter(msg => msg.id !== messageId));
+    
+    // Retry the last message
+    await sendMessage(lastUserMessage, lastModel);
+  };
+
+  const handleShowMockData = () => {
+    // Remove any error messages
+    setMessages(prev => prev.filter(msg => msg.type !== 'error'));
+    
+    // Set mock data flag and append mock history to existing messages
+    setShowMockData(true);
+    setMessages(prev => [...prev, ...mockChatHistory]);
   };
 
   return {
     messages,
     isLoading,
     sendMessage,
+    retryMessage,
+    handleShowMockData,
+    showMockData,
   };
 }

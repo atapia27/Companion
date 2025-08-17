@@ -13,7 +13,7 @@ interface ChatTabProps {
 }
 
 export function ChatTab({ processedContent, onSwitchToContext }: ChatTabProps) {
-  const { messages, isLoading, sendMessage } = useChatMessages(processedContent);
+  const { messages, isLoading, sendMessage, retryMessage, handleShowMockData } = useChatMessages(processedContent);
   const { model, showModelSelector, setShowModelSelector, handleModelChange } = useModelSelector();
 
   const handleSendMessage = (content: string) => {
@@ -35,7 +35,12 @@ export function ChatTab({ processedContent, onSwitchToContext }: ChatTabProps) {
         onModelChange={handleModelChange}
       />
 
-      <ChatMessagesContainer messages={messages} isLoading={isLoading} />
+      <ChatMessagesContainer 
+        messages={messages} 
+        isLoading={isLoading} 
+        onRetryMessage={retryMessage}
+        onShowMockData={handleShowMockData}
+      />
 
       <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
     </div>
