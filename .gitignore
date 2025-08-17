@@ -105,3 +105,4 @@ temp/
 *.md
 !README.md
 !public/**/*.md
+tsconfig.tsbuildinfo

@@ -40,9 +40,9 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
           </div>
           <Button
             onClick={onCloseAction}
-            variant="ghost"
+            variant="close"
             size="sm"
-            className="text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 hover:bg-neutralharmony-primary-50 rounded-xl p-2"
+            className="rounded-xl p-2"
           >
             <X className="w-5 h-5" />
             <span className="sr-only">Close</span>

@@ -41,23 +41,20 @@ export function ProcessingStatus({
       {/* Processed Items - Compact Badge Layout */}
       {processedItems.length > 0 && (
         <div className="mt-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-2">
-              <div className={`w-5 h-5 bg-gradient-to-br rounded-lg flex items-center justify-center ${
-                itemType === 'file' 
-                  ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
-                  : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500'
-              }`}>
-                <IconComponent className="w-3 h-3 text-neutralharmony-background-50" />
-              </div>
-              <h3 className="text-sm font-bold text-neutralharmony-primary-900">
-                Processed {itemLabel} ({processedItems.length})
-              </h3>
-            </div>
-            <div className="w-5 h-5 bg-gradient-to-br from-neutralharmony-secondary-400 to-neutralharmony-secondary-500 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-3 h-3 text-neutralharmony-background-50" />
-            </div>
-          </div>
+                     <div className="flex items-center justify-between mb-3">
+             <div className="flex items-center space-x-2">
+               <div className={`w-5 h-5 bg-gradient-to-br rounded-lg flex items-center justify-center ${
+                 itemType === 'file' 
+                   ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
+                   : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500'
+               }`}>
+                 <IconComponent className="w-3 h-3 text-neutralharmony-background-50" />
+               </div>
+               <h3 className="text-sm font-bold text-neutralharmony-primary-900">
+                 Processed {itemLabel} ({processedItems.length})
+               </h3>
+             </div>
+           </div>
           
           {/* Compact Badge Layout */}
           <div className="flex flex-wrap gap-2">
@@ -85,6 +82,80 @@ export function ProcessingStatus({
         </div>
       )}
     </>
+  );
+}
+
+// New reusable component for displaying processed content
+export function ProcessedContentDisplay({ 
+  processedItems, 
+  itemType 
+}: { 
+  processedItems: FileProcessingResult[]; 
+  itemType: 'file' | 'url' | 'mixed'; 
+}) {
+  const IconComponent = itemType === 'file' ? FileText : LinkIcon;
+  const itemLabel = itemType === 'file' ? 'Files' : itemType === 'url' ? 'URLs' : 'Content';
+  const itemLabelSingular = itemType === 'file' ? 'File' : itemType === 'url' ? 'URL' : 'Item';
+
+  if (processedItems.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          {itemType !== 'mixed' && (
+            <div className={`w-5 h-5 bg-gradient-to-br rounded-lg flex items-center justify-center ${
+              itemType === 'file' 
+                ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
+                : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500'
+            }`}>
+              <IconComponent className="w-3 h-3 text-neutralharmony-background-50" />
+            </div>
+          )}
+          <h3 className="text-sm font-bold text-neutralharmony-primary-900">
+            {itemType === 'mixed' ? 'Content to Analyze' : `Processed ${itemLabel}`} ({processedItems.length} items)
+          </h3>
+        </div>
+        {itemType !== 'mixed' && (
+          <div className="w-5 h-5 bg-gradient-to-br from-neutralharmony-secondary-400 to-neutralharmony-secondary-500 rounded-lg flex items-center justify-center">
+            <CheckCircle className="w-3 h-3 text-neutralharmony-background-50" />
+          </div>
+        )}
+      </div>
+      
+      {/* Compact Badge Layout */}
+      <div className="flex flex-wrap gap-2">
+        {processedItems.map((item, index) => {
+          const isFile = item.metadata.filename;
+          const itemGradient = isFile 
+            ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
+            : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500';
+          
+          return (
+            <div
+              key={index}
+              className="flex items-center space-x-2 px-3 py-2 bg-white border-2 border-neutralharmony-background-300 rounded-lg hover:border-neutralharmony-primary-400 transition-all duration-200"
+            >
+              <div className={`w-4 h-4 bg-gradient-to-br rounded flex items-center justify-center ${itemGradient}`}>
+                {isFile ? (
+                  <FileText className="w-2 h-2 text-neutralharmony-background-50" />
+                ) : (
+                  <LinkIcon className="w-2 h-2 text-neutralharmony-background-50" />
+                )}
+              </div>
+              <span className="font-medium text-neutralharmony-primary-900 text-xs truncate max-w-24">
+                {item.metadata.customName || item.metadata.filename || item.metadata.summary || `${isFile ? 'File' : 'URL'} ${index + 1}`}
+              </span>
+              <span className="text-xs text-neutralharmony-primary-600 bg-neutralharmony-background-100 px-1.5 py-0.5 rounded">
+                {item.text.length}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

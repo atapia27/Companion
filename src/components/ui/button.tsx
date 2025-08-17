@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'close' | 'selector' | 'model-selector';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   icon?: React.ReactNode;
@@ -27,6 +27,9 @@ export function Button({
     outline: 'border border-freshgreens-secondary-200 bg-white hover:bg-freshgreens-secondary-50 hover:text-freshgreens-secondary-900 dark:bg-freshgreens-secondary-900 dark:border-freshgreens-secondary-700 dark:hover:bg-freshgreens-secondary-800',
     ghost: 'hover:bg-freshgreens-primary-50 hover:text-freshgreens-primary-900 dark:hover:bg-freshgreens-primary-950 dark:hover:text-freshgreens-primary-100',
     destructive: 'bg-freshgreens-contrast-700 text-white hover:bg-freshgreens-contrast-600',
+    close: 'bg-transparent text-neutralharmony-primary-600 hover:text-red-700 hover:bg-red-400 border-none shadow-none',
+    selector: 'bg-white text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 hover:bg-neutralharmony-background-50 border-2 border-neutralharmony-background-300 font-semibold shadow-sm',
+    'model-selector': 'bg-white text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 hover:bg-neutralharmony-background-50 border-2 border-neutralharmony-background-300 font-semibold shadow-sm',
   };
 
   const sizeClasses = {

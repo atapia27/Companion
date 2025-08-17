@@ -1,6 +1,7 @@
 'use client';
 
 import { X, Brain, Shield, Zap, FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface AboutModalProps {
   onClose: () => void;
@@ -12,12 +13,14 @@ export function AboutModal({ onClose }: AboutModalProps) {
       <div className="bg-background rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-foreground">About AI Knowledge Companion</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-muted rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+                     <Button
+             onClick={onClose}
+             variant="close"
+             size="sm"
+             className="rounded-lg"
+           >
+             <X className="w-5 h-5" />
+           </Button>
         </div>
 
         <div className="space-y-6">

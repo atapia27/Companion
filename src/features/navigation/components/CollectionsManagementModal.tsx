@@ -1,6 +1,7 @@
 'use client';
 
 import { X, Folder, Plus, Trash2, Edit3 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useCollections } from '../../context-management/hooks';
 
 interface CollectionsManagementModalProps {
@@ -15,12 +16,14 @@ export function CollectionsManagementModal({ onCloseAction }: CollectionsManagem
       <div className="bg-background rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-foreground">Collections</h2>
-          <button
-            onClick={onCloseAction}
-            className="p-2 hover:bg-muted rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+                     <Button
+             onClick={onCloseAction}
+             variant="close"
+             size="sm"
+             className="rounded-lg"
+           >
+             <X className="w-5 h-5" />
+           </Button>
         </div>
 
         <div className="space-y-6">

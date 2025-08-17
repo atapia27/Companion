@@ -31,7 +31,7 @@ const tabs = [
 
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
   return (
-    <div className="flex space-x-2 mb-8 bg-gradient-to-r from-neutralharmony-primary-600 to-neutralharmony-primary-700 rounded-xl p-2 shadow-md border border-neutralharmony-primary-500 px-4">
+    <div className="w-full flex space-x-2 mb-8 bg-gradient-to-r from-neutralharmony-primary-600 to-neutralharmony-primary-700 rounded-xl p-2 shadow-md border border-neutralharmony-primary-500 px-4">
       {tabs.map((tab) => (
         <button
           key={tab.id}

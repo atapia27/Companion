@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FileUploadModal } from '@/features/context-management/components/FileUploadModal';
 import { URLInputModal } from '@/features/context-management/components/URLInputModal';
-import { BriefingGeneratorModal } from '@/features/briefing/components/BriefingGeneratorModal';
-import { ChatInterfaceModal } from '@/features/chat/components/ChatInterfaceModal';
+
 import { AboutModal } from '@/features/navigation';
 import { SettingsModal } from '@/features/navigation';
 import { CollectionsManagementModal } from '@/features/navigation/components/CollectionsManagementModal';
 import { FileProcessingResult } from '@/types';
+import { useBriefing, Briefing } from '@/features/briefing/hooks';
 
 // Feature-based imports
 import { Header, TabNavigation, TabType, NavTabType } from '@/features/navigation';
@@ -23,9 +23,8 @@ export default function AppPage() {
   const [activeNavTab, setActiveNavTab] = useState<NavTabType | null>(null);
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [showURLInput, setShowURLInput] = useState(false);
-  const [showChatInterface, setShowChatInterface] = useState(false);
-  const [showBriefingGenerator, setShowBriefingGenerator] = useState(false);
   const [processedContent, setProcessedContent] = useState<FileProcessingResult[]>([]);
+  const { briefings, isGenerating, generateBriefing, deleteBriefing } = useBriefing(processedContent);
 
   useEffect(() => {
     setMounted(true);
@@ -47,17 +46,12 @@ export default function AppPage() {
     setProcessedContent(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleStartChat = () => {
-    setShowChatInterface(true);
-  };
-
-  const handleGenerateBriefing = () => {
-    setShowBriefingGenerator(true);
-  };
 
   const handleSwitchToContext = () => {
     setActiveTab('manage-context');
   };
+
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -68,21 +62,21 @@ export default function AppPage() {
       />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        {/* Tab Navigation */}
-        <TabNavigation 
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-        />
+      <div className="w-full py-8 px-72">
+          {/* Tab Navigation */}
+          <TabNavigation 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
 
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="space-y-6"
-        >
+          {/* Tab Content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+          >
           {/* Manage Context Tab */}
           {activeTab === 'manage-context' && (
             <ContextManagementTab
@@ -97,7 +91,6 @@ export default function AppPage() {
           {activeTab === 'ask-questions' && (
             <ChatTab
               processedContent={processedContent}
-              onStartChat={handleStartChat}
               onSwitchToContext={handleSwitchToContext}
             />
           )}
@@ -106,7 +99,9 @@ export default function AppPage() {
           {activeTab === 'generate-briefings' && (
             <BriefingTab
               processedContent={processedContent}
-              onGenerateBriefing={handleGenerateBriefing}
+              briefings={briefings}
+              onAddBriefing={generateBriefing}
+              onDeleteBriefing={deleteBriefing}
               onSwitchToContext={handleSwitchToContext}
             />
           )}
@@ -129,21 +124,6 @@ export default function AppPage() {
           existingContent={processedContent}
         />
       )}
-
-      {showChatInterface && (
-        <ChatInterfaceModal
-          content={processedContent}
-          onClose={() => setShowChatInterface(false)}
-        />
-      )}
-
-      {showBriefingGenerator && (
-        <BriefingGeneratorModal
-          content={processedContent}
-          onCloseAction={() => setShowBriefingGenerator(false)}
-        />
-      )}
-
       {/* Navigation Modals */}
       {activeNavTab === 'about' && (
         <AboutModal onClose={() => setActiveNavTab(null)} />
