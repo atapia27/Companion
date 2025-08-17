@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { fileProcessor } from '@/lib/file-processor';
 import { FileProcessingResult, ProcessingProgress } from '@/types';
@@ -13,6 +13,12 @@ export function useFileUpload({ onFileProcessedAction, existingContent }: UseFil
   const [progress, setProgress] = useState<ProcessingProgress | null>(null);
   const [processedFiles, setProcessedFiles] = useState<FileProcessingResult[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Initialize processedFiles with existing content (files only)
+  useEffect(() => {
+    const existingFiles = existingContent.filter(content => content.metadata.filename);
+    setProcessedFiles(existingFiles);
+  }, [existingContent]);
 
   const handleTestFile = async (sampleFile: {
     path: string;

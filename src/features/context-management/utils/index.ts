@@ -1,2 +1,2 @@
 export { getFileTypeIcon } from './fileTypeUtils';
-export { sampleFiles, sampleURL } from './sampleData';
+export { sampleFiles, sampleURLs, sampleURL } from './sampleData';

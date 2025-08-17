@@ -44,7 +44,7 @@ export function ContentDisplay({ processedContent, onRemoveContentAction }: Cont
                     <div key={originalIndex} className="p-4 bg-white rounded-lg border border-neutralharmony-background-300 hover:border-neutralharmony-primary-400 transition-all duration-200 hover:shadow-lg">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-3 flex-1">
-                          <div className="w-10 h-10 bg-white border border-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                          <div className="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
                             {getFileTypeIcon(content.metadata.type || '', content.metadata.filename)}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -88,15 +88,20 @@ export function ContentDisplay({ processedContent, onRemoveContentAction }: Cont
                 {urls.map((content, index) => {
                   const originalIndex = processedContent.indexOf(content);
                   return (
-                    <div key={originalIndex} className="p-4 bg-white rounded-lg border border-neutralharmony-background-300 hover:border-neutralharmony-primary-400 transition-all duration-200 hover:shadow-lg">
+                    <div key={originalIndex} className="p-4 bg-white rounded-lg border border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-400 transition-all duration-200 hover:shadow-lg">
                       <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <p className="font-bold text-neutralharmony-primary-900 text-sm mb-1">
-                            {content.metadata.customName || content.metadata.summary || `URL ${originalIndex + 1}`}
-                          </p>
-                          <p className="text-xs text-neutralharmony-primary-600 font-medium">
-                            {content.text.length} characters
-                          </p>
+                        <div className="flex items-start space-x-3 flex-1">
+                          <div className="w-10 h-10 border border-gray-200 bg-gradient-to-br from-neutralharmony-tertiary-300 to-neutralharmony-tertiary-400 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                            <LinkIcon className="w-5 h-5 text-neutralharmony-primary-900" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-bold text-neutralharmony-primary-900 text-sm mb-1 truncate">
+                              {content.metadata.customName || content.metadata.summary || `URL ${originalIndex + 1}`}
+                            </p>
+                            <p className="text-xs text-neutralharmony-primary-600 font-medium">
+                              {content.text.length} characters
+                            </p>
+                          </div>
                         </div>
                         <button
                           onClick={() => onRemoveContentAction(originalIndex)}

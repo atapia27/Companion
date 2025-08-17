@@ -25,8 +25,23 @@ export const sampleFiles = [
   }
 ];
 
-export const sampleURL = {
-  url: 'https://react.dev/learn/thinking-in-react',
-  name: 'React Thinking Guide',
-  description: 'Official React documentation about thinking in React'
-};
+export const sampleURLs = [
+  {
+    url: 'https://react.dev/learn/thinking-in-react',
+    name: 'React Thinking Guide',
+    description: 'Official React documentation about thinking in React'
+  },
+  {
+    url: 'https://nextjs.org/docs/getting-started',
+    name: 'Next.js Getting Started',
+    description: 'Official Next.js documentation for beginners'
+  },
+  {
+    url: 'https://tailwindcss.com/docs/installation',
+    name: 'Tailwind CSS Docs',
+    description: 'Official Tailwind CSS installation and usage guide'
+  }
+];
+
+// Keep the old export for backward compatibility
+export const sampleURL = sampleURLs[0];

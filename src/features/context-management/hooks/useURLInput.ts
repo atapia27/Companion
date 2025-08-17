@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fileProcessor } from '@/lib/file-processor';
 import { FileProcessingResult } from '@/types';
 
@@ -9,10 +9,15 @@ interface UseURLInputProps {
 
 export function useURLInput({ onURLProcessed, existingContent }: UseURLInputProps) {
   const [url, setUrl] = useState('');
-  const [name, setName] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [processedURLs, setProcessedURLs] = useState<FileProcessingResult[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Initialize processedURLs with existing content (URLs only)
+  useEffect(() => {
+    const existingURLs = existingContent.filter(content => !content.metadata.filename);
+    setProcessedURLs(existingURLs);
+  }, [existingContent]);
 
   const handleTestURL = async (sampleURL: {
     url: string;
@@ -79,20 +84,22 @@ export function useURLInput({ onURLProcessed, existingContent }: UseURLInputProp
     try {
       const result = await fileProcessor.extractFromURL(url);
       
+      // Use the website's title/summary as the custom name
+      const customName = result.metadata.summary || result.metadata.title || 'Web page content';
+      
       // Check for duplicates after getting the result
-      const customName = name.trim() || result.metadata.summary || 'Web page content';
       const isDuplicate = existingContent.some(content => 
         content.metadata.customName === customName ||
         content.metadata.summary === customName
       );
 
       if (isDuplicate) {
-        setError('This URL or content name is already added');
+        setError('This URL or content is already added');
         setIsProcessing(false);
         return;
       }
       
-      // Add custom name to the result if provided
+      // Add custom name to the result
       const resultWithName = {
         ...result,
         metadata: {
@@ -104,7 +111,6 @@ export function useURLInput({ onURLProcessed, existingContent }: UseURLInputProp
       setProcessedURLs(prev => [...prev, resultWithName]);
       onURLProcessed(resultWithName);
       setUrl('');
-      setName('');
     } catch (error) {
       console.error('Error processing URL:', error);
       let errorMessage = 'Failed to process URL';
@@ -128,8 +134,6 @@ export function useURLInput({ onURLProcessed, existingContent }: UseURLInputProp
   return {
     url,
     setUrl,
-    name,
-    setName,
     isProcessing,
     processedURLs,
     error,

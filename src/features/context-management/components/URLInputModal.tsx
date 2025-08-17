@@ -4,8 +4,8 @@ import { Link, X, Loader2, TestTube } from 'lucide-react';
 import { FileProcessingResult } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useURLInput } from '../hooks';
-import { sampleURL } from '../utils';
-import { ProcessingStatus } from './ProcessingStatus';
+import { sampleURLs } from '../utils';
+import { ProcessingStatus, InlineStatusMessage } from './ProcessingStatus';
 
 interface URLInputModalProps {
   onURLProcessedAction: (result: FileProcessingResult) => void;
@@ -17,8 +17,6 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
   const {
     url,
     setUrl,
-    name,
-    setName,
     isProcessing,
     processedURLs,
     error,
@@ -28,15 +26,23 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
   } = useURLInput({ onURLProcessed: onURLProcessedAction, existingContent });
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-neutralharmony-background-50 dark:bg-neutralharmony-primary-900 rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto border border-neutralharmony-background-300 dark:border-neutralharmony-primary-700">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[85vh] overflow-y-auto border-2 border-neutralharmony-background-300 shadow-2xl">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-neutralharmony-primary-900 dark:text-neutralharmony-background-50">Add URL</h2>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-xl flex items-center justify-center shadow-lg">
+              <Link className="w-5 h-5 text-neutralharmony-primary-900" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-neutralharmony-primary-900">Add URL</h2>
+              <p className="text-neutralharmony-primary-600 text-sm">Extract content from web pages</p>
+            </div>
+          </div>
           <Button
             onClick={onCloseAction}
             variant="ghost"
             size="sm"
-            className="text-neutralharmony-primary-700 dark:text-neutralharmony-background-400 hover:text-neutralharmony-primary-900 dark:hover:text-neutralharmony-background-50"
+            className="text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 hover:bg-neutralharmony-primary-50 rounded-xl p-2"
           >
             <X className="w-5 h-5" />
             <span className="sr-only">Close</span>
@@ -46,21 +52,7 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
         {/* URL Input Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-neutralharmony-primary-900 dark:text-neutralharmony-background-50 mb-2">
-              Content Name (Optional)
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., React Documentation, News Article, etc."
-              className="w-full px-3 py-2 border border-neutralharmony-background-300 dark:border-neutralharmony-primary-700 rounded-lg bg-neutralharmony-background-50 dark:bg-neutralharmony-primary-800 text-neutralharmony-primary-900 dark:text-neutralharmony-background-50 placeholder:text-neutralharmony-primary-500 dark:placeholder:text-neutralharmony-background-400 focus:outline-none focus:ring-2 focus:ring-neutralharmony-primary-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="url" className="block text-sm font-medium text-neutralharmony-primary-900 dark:text-neutralharmony-background-50 mb-2">
+            <label htmlFor="url" className="block text-sm font-bold text-neutralharmony-primary-900 mb-2">
               URL *
             </label>
             <input
@@ -70,16 +62,14 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com/article"
               required
-              className="w-full px-3 py-2 border border-neutralharmony-background-300 dark:border-neutralharmony-primary-700 rounded-lg bg-neutralharmony-background-50 dark:bg-neutralharmony-primary-800 text-neutralharmony-primary-900 dark:text-neutralharmony-background-50 placeholder:text-neutralharmony-primary-500 dark:placeholder:text-neutralharmony-background-400 focus:outline-none focus:ring-2 focus:ring-neutralharmony-primary-500 focus:border-transparent"
+              className="w-full px-3 py-2 border-2 border-neutralharmony-background-300 rounded-xl bg-white text-neutralharmony-primary-900 placeholder:text-neutralharmony-primary-500 focus:outline-none focus:ring-2 focus:ring-neutralharmony-primary-500 focus:border-neutralharmony-primary-400 transition-all duration-200"
             />
           </div>
-
-
 
           <Button
             type="submit"
             disabled={isProcessing || !url.trim()}
-            className="w-full bg-neutralharmony-primary-500 hover:bg-neutralharmony-primary-600 text-neutralharmony-background-50 px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-neutralharmony-tertiary-500 to-neutralharmony-tertiary-600 hover:from-neutralharmony-tertiary-600 hover:to-neutralharmony-tertiary-700 text-neutralharmony-primary-900 px-4 py-2 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-300"
           >
             {isProcessing ? (
               <>
@@ -95,34 +85,51 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
           </Button>
         </form>
 
-        {/* Test URL Section */}
+        {/* Test URLs Section - Compact Grid Layout */}
         <div className="mt-6">
-          <div className="flex items-center space-x-2 mb-4">
-            <TestTube className="w-5 h-5 text-neutralharmony-tertiary-600" />
-            <h3 className="text-lg font-semibold text-neutralharmony-primary-900 dark:text-neutralharmony-background-50">
-              Test URL
-            </h3>
-          </div>
-          <button
-            onClick={() => handleTestURL(sampleURL)}
-            disabled={isProcessing}
-            className="w-full flex items-center space-x-3 p-3 bg-neutralharmony-tertiary-50 dark:bg-neutralharmony-tertiary-900/20 border border-neutralharmony-tertiary-200 dark:border-neutralharmony-tertiary-700 rounded-lg hover:bg-neutralharmony-tertiary-100 dark:hover:bg-neutralharmony-tertiary-900/40 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Link className="w-5 h-5 text-neutralharmony-tertiary-600 flex-shrink-0" />
-            <div className="text-left flex-1 min-w-0">
-              <p className="font-medium text-neutralharmony-primary-900 dark:text-neutralharmony-background-50 text-sm truncate">
-                {sampleURL.name}
-              </p>
-              <p className="text-xs text-neutralharmony-primary-600 dark:text-neutralharmony-background-400 truncate">
-                {sampleURL.description}
-              </p>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <div className="w-6 h-6 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-lg flex items-center justify-center">
+                <TestTube className="w-3 h-3 text-neutralharmony-primary-900" />
+              </div>
+              <h3 className="text-base font-bold text-neutralharmony-primary-900">
+                Test URLs
+              </h3>
+              {/* Inline Status Messages */}
+              {error && (
+                <InlineStatusMessage
+                  key="error-message"
+                  message={error}
+                  type="error"
+                  onClear={() => setError(null)}
+                />
+              )}
             </div>
-          </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            {sampleURLs.map((sampleURL: { url: string; name: string; description: string }, index: number) => (
+              <button
+                key={index}
+                onClick={() => handleTestURL(sampleURL)}
+                disabled={isProcessing}
+                className="flex flex-col items-center space-y-2 p-3 bg-white border-2 border-neutralharmony-background-300 rounded-lg hover:border-neutralharmony-tertiary-400 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-lg flex items-center justify-center group-hover:from-neutralharmony-tertiary-500 group-hover:to-neutralharmony-tertiary-600 transition-all duration-300 shadow-sm">
+                  <Link className="w-4 h-4 text-neutralharmony-primary-900" />
+                </div>
+                <div className="text-center">
+                  <p className="font-semibold text-neutralharmony-primary-900 text-xs truncate w-full">
+                    {sampleURL.name}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Processing Status */}
         <ProcessingStatus
-          error={error}
+          error={null}
           progress={null}
           processedItems={processedURLs}
           itemType="url"
@@ -135,7 +142,7 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
           <Button
             onClick={onCloseAction}
             disabled={isProcessing}
-            className="bg-neutralharmony-primary-500 hover:bg-neutralharmony-primary-600 text-neutralharmony-background-50 px-6 py-2 rounded-lg disabled:opacity-50"
+            className="bg-gradient-to-r from-neutralharmony-primary-500 to-neutralharmony-primary-600 hover:from-neutralharmony-primary-600 hover:to-neutralharmony-primary-700 text-neutralharmony-background-50 px-6 py-2 rounded-xl font-semibold disabled:opacity-50 shadow-lg hover:shadow-xl transition-all duration-300"
           >
             Done
           </Button>
