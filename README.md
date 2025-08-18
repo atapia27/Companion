@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**AI Document Companion** is a full-stack web application that provides **evidence-based AI analysis** with proper document citation. Unlike generic AI responses, this platform ensures every insight, claim, and recommendation is grounded in your specific documents with clear source citations.
+**AI Document Companion** is a full-stack web application that provides **evidence-based AI analysis** with proper document citation. Unlike generic AI responses, this platform ensures every insight, claim, and recommendation is grounded in your specific documents with clear source citations. Built with **smart architecture** that leverages OpenRouter's platform for AI models - **no self-hosting required!** - making it cost-effective and scalable while providing access to multiple AI providers like Google Gemini and OpenAI GPT. The project showcases modern React/Next.js capabilities by using **no external state management** - demonstrating what's possible with just React hooks, Context API, and built-in Next.js features.
 
 ### Core Mission
 
@@ -10,6 +10,16 @@
 - **Transparency & Reliability**: Every claim includes specific references to source materials
 - **Consistent Quality**: Structured approach to document analysis ensures reliable results
 - **Privacy-First**: Client-side processing with no external data storage
+- **Smart AI Architecture**: Leverages OpenRouter's platform for AI models - **no self-hosting required!**
+
+### AI Model Strategy
+
+**Smart Architecture Choice**: Instead of hosting AI models ourselves, we leverage OpenRouter's platform which provides:
+- **Zero Infrastructure Management**: No need to deploy, maintain, or scale AI models
+- **Cost-Effective**: Free tier available, pay-per-use pricing for production
+- **Multiple Model Access**: Easy switching between Google Gemini, OpenAI GPT, and other providers
+- **Automatic Scaling**: Handles traffic spikes without manual intervention
+- **Enterprise-Grade Reliability**: Built on proven AI infrastructure
 
 ### Key Achievements
 
@@ -32,7 +42,7 @@
 ### Backend & AI Integration
 
 - **Netlify Functions** for serverless backend services
-- **OpenRouter API** integration with multiple AI models
+- **OpenRouter API** integration with multiple AI models (no self-hosting required!)
 - **Local storage** using IndexedDB for client-side data persistence
 - **File processing** with PDF.js, mammoth.js, and OCR capabilities
 
@@ -75,7 +85,7 @@
 - **TypeScript**: Ensures code quality and maintainability in a complex application
 - **Netlify Functions**: Provides serverless backend without managing infrastructure
 - **Local Storage**: Prioritizes user privacy and reduces server costs
-- **OpenRouter**: Offers access to multiple AI models with intelligent routing
+- **OpenRouter**: Offers access to multiple AI models with intelligent routing - **no self-hosting required!**
 
 ### Evidence-Based Approach
 
@@ -96,7 +106,7 @@
 ### Prerequisites
 
 - Node.js 18+ (required by package.json engines)
-- OpenRouter API key (free tier available at [openrouter.ai](https://openrouter.ai))
+- OpenRouter API key (free tier available at [openrouter.ai](https://openrouter.ai)) - **No AI model hosting required!**
 
 ### Quick Start
 
@@ -146,11 +156,12 @@ This project demonstrates:
 
 - **Evidence-based AI development** with proper citation systems
 - **Full-stack development** from concept to deployment
-- **AI/ML integration** in real-world applications
+- **AI/ML integration** in real-world applications (without self-hosting models!)
 - **Modern React patterns** and best practices
 - **Performance optimization** and user experience design
 - **Problem-solving** with complex technical challenges
 - **Documentation** and code organization skills
+- **Smart architecture decisions** - leveraging external AI services instead of complex self-hosting
 
 ## Live Demo
 
