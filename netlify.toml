@@ -5,6 +5,12 @@
 [build.environment]
   NODE_VERSION = "18"
 
+[dev]
+  command = "npm run dev"
+  port = 8888
+  targetPort = 3001
+  framework = "next"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"

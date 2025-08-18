@@ -37,48 +37,77 @@ export function BriefingList({
     );
   }
 
-  return (
-    <div className="space-y-4 mb-6">
-      {/* Show skeleton when generating */}
-      {isGenerating && <BriefingCardSkeleton />}
-      
-      {/* Show error state when generation fails */}
-      {generationError && !isGenerating && onRetryGeneration && (
-        <BriefingCardError 
-          error={generationError} 
-          onRetry={onRetryGeneration}
-        />
-      )}
-      
-      {briefings.map((briefing, index) => {
-        // Check if this is the first mock briefing (IDs 1, 2, 3)
-        const isMockBriefing = ['1', '2', '3'].includes(briefing.id);
-        const isFirstMockBriefing = isMockBriefing && 
-          !briefings.slice(0, index).some(b => ['1', '2', '3'].includes(b.id));
-        
-        return (
-          <div key={briefing.id}>
-            {/* Add divider before the first mock briefing */}
-            {isFirstMockBriefing && (
-              <div className="mb-6 p-4 bg-gradient-to-br from-neutralharmony-tertiary-50 to-neutralharmony-tertiary-100 border-2 border-neutralharmony-tertiary-200 rounded-xl">
-                <div className="text-center">
-                  <p className="text-sm font-semibold text-neutralharmony-tertiary-700">
-                    📋 Example Briefings (Demo)
-                  </p>
-                  <p className="text-xs text-neutralharmony-tertiary-600 mt-1">
-                    These are sample briefings to demonstrate the feature
-                  </p>
-                </div>
+     return (
+     <div className="space-y-4 mb-6">
+       {(() => {
+         let mockBriefingContainer = null;
+         let mockBriefings: Briefing[] = [];
+         let regularBriefings: Briefing[] = [];
+         
+         // Separate mock and regular briefings
+         briefings.forEach((briefing, index) => {
+           const isMockBriefing = ['1', '2', '3'].includes(briefing.id);
+           
+           if (isMockBriefing) {
+             mockBriefings.push(briefing);
+           } else {
+             regularBriefings.push(briefing);
+           }
+         });
+         
+         // Create mock briefing container if we have mock briefings
+         if (mockBriefings.length > 0) {
+           mockBriefingContainer = (
+             <div className="mb-6 p-4 bg-gradient-to-br from-neutralharmony-tertiary-50 to-neutralharmony-tertiary-100 border-2 border-neutralharmony-tertiary-200 rounded-xl">
+                             <div className="text-center mb-4">
+                <h3 className="text-lg font-bold text-white mb-2">
+                  Example Summaries (Demo)
+                </h3>
+                <p className="text-sm text-white/80 leading-relaxed">
+                  These are sample summaries to demonstrate the feature
+                </p>
               </div>
-            )}
-            
-            <BriefingCard
-              briefing={briefing}
-              onDelete={onDeleteBriefing}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
+               <div className="space-y-3">
+                 {mockBriefings.map((briefing) => (
+                   <div key={briefing.id} className="mx-4">
+                     <BriefingCard
+                       briefing={briefing}
+                       onDelete={onDeleteBriefing}
+                     />
+                   </div>
+                 ))}
+               </div>
+             </div>
+           );
+         }
+         
+         return (
+           <>
+             {/* Show skeleton when generating */}
+             {isGenerating && <BriefingCardSkeleton />}
+             
+             {/* Show error state when generation fails */}
+             {generationError && !isGenerating && onRetryGeneration && (
+               <BriefingCardError 
+                 error={generationError} 
+                 onRetry={onRetryGeneration}
+               />
+             )}
+             
+             {/* Regular briefings - displayed first */}
+             {regularBriefings.map((briefing) => (
+               <BriefingCard
+                 key={briefing.id}
+                 briefing={briefing}
+                 onDelete={onDeleteBriefing}
+               />
+             ))}
+             
+             {/* Mock briefings container - displayed after regular briefings */}
+             {mockBriefingContainer}
+           </>
+         );
+       })()}
+     </div>
+   );
 }

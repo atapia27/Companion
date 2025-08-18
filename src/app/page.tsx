@@ -136,6 +136,8 @@ export default function AppPage() {
       {activeNavTab === 'settings' && (
         <SettingsModal onClose={() => setActiveNavTab(null)} />
       )}
+
+
     </div>
   );
 }

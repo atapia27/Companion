@@ -1,10 +1,17 @@
 import mammoth from 'mammoth';
 import { createWorker } from 'tesseract.js';
-import * as pdfjsLib from 'pdfjs-dist';
 import { FileProcessingResult, ProcessingProgress, DocumentMetadata } from '@/types';
 
-// Set up PDF.js worker - use local worker file
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+// Dynamic import for PDF.js to avoid SSR issues
+let pdfjsLib: any = null;
+
+const getPdfJs = async () => {
+  if (!pdfjsLib) {
+    pdfjsLib = await import('pdfjs-dist');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+  }
+  return pdfjsLib;
+};
 
 export class FileProcessor {
   private static instance: FileProcessor;
@@ -131,7 +138,8 @@ export class FileProcessor {
       });
 
       // Load PDF document using PDF.js
-      const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
+      const pdf = await getPdfJs();
+      const loadingTask = pdf.getDocument({ data: uint8Array });
       const pdfDocument = await loadingTask.promise;
 
       onProgress?.({

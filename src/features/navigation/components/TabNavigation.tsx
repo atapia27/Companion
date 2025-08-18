@@ -23,7 +23,7 @@ const tabs = [
   },
   {
     id: 'generate-briefings' as TabType,
-    label: 'Generate Briefings',
+    label: 'Generate Summary',
     icon: FileBarChart,
     description: 'Create comprehensive reports with key insights'
   }

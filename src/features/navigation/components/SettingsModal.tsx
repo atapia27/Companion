@@ -11,7 +11,7 @@ interface SettingsModalProps {
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
-  const [model, setModel] = useState('gemini-2.0-flash-exp');
+  const [model, setModel] = useState('gpt-oss-20b');
   const { toast } = useToast();
 
   // Load settings from localStorage on component mount
@@ -70,13 +70,13 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                    backgroundSize: '16px'
                  }}
                >
-                 <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Free) - Default</option>
-                 <option value="gpt-oss-20b">GPT-OSS-20B (Free)</option>
+                 <option value="gpt-oss-20b">GPT-OSS-20B (Free) - Default</option>
+                 <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Free)</option>
                  <option value="gpt-4" disabled>GPT-4 (Coming Soon)</option>
                  <option value="claude" disabled>Claude (Coming Soon)</option>
                </select>
                <p className="text-sm text-neutralharmony-primary-600 mt-3 leading-relaxed text-start">
-                 Currently using <span className="font-semibold">{model === 'gemini-2.0-flash-exp' ? 'Gemini 2.0 Flash' : 'GPT-OSS-20B'}</span> as your AI model.
+                 Currently using <span className="font-semibold">{model === 'gpt-oss-20b' ? 'GPT-OSS-20B' : 'Gemini 2.0 Flash'}</span> as your AI model.
                </p>
              </div>
            </div>

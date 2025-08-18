@@ -26,9 +26,9 @@ export function BriefingHeader({
         <div className="w-10 h-10 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-xl flex items-center justify-center shadow-lg">
           <FileBarChart className="w-5 h-5 text-neutralharmony-background-50" />
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-neutralharmony-primary-900">Generate Briefings</h2>
-        </div>
+                 <div>
+           <h2 className="text-2xl font-bold text-neutralharmony-primary-900">Generate Summary</h2>
+         </div>
       </div>
       <div className="flex items-center space-x-2">
         {/* AI Model Selector */}
@@ -105,7 +105,7 @@ export function BriefingHeader({
             className="bg-gradient-to-r from-neutralharmony-tertiary-500 to-neutralharmony-tertiary-600 hover:from-neutralharmony-tertiary-600 hover:to-neutralharmony-tertiary-700 text-neutralharmony-background-50 px-4 py-2 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200 flex items-center space-x-2"
           >
             <Plus className="w-4 h-4 text-white" />
-            <span className="text-white">{isGenerating ? 'Generating...' : 'New Briefing'}</span>
+            <span className="text-white">{isGenerating ? 'Generating...' : 'New Summary'}</span>
           </Button>
         )}
       </div>

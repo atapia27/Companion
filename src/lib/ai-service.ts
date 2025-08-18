@@ -3,19 +3,12 @@ import { AIRequest, AIResponse, ContextPassage, RetrievalSettings } from '@/type
 export class AIService {
   private static instance: AIService;
   private baseUrl: string;
+  private mockMode: boolean;
 
   private constructor() {
-    // Check if we're in development or production
-    const isDevelopment = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-    
-    if (isDevelopment) {
-      // Try to find the correct port for Netlify functions
-      const port = window.location.port;
-      const netlifyPort = port === '3000' ? '8888' : port === '3001' ? '8888' : port === '3002' ? '8888' : '8888';
-      this.baseUrl = `http://localhost:${netlifyPort}/.netlify/functions`;
-    } else {
-      this.baseUrl = '/.netlify/functions';
-    }
+    this.baseUrl = process.env.NEXT_PUBLIC_NETLIFY_FUNCTIONS_URL || '/.netlify/functions';
+    // Check localStorage for mock mode setting
+    this.mockMode = typeof window !== 'undefined' && localStorage.getItem('mock-api-enabled') === 'true';
   }
 
   static getInstance(): AIService {
@@ -25,6 +18,153 @@ export class AIService {
     return AIService.instance;
   }
 
+  // Mock response generator for testing
+  private generateMockResponse(type: 'chat' | 'briefing', question?: string, context?: ContextPassage[]): AIResponse {
+    const mockResponses = {
+      chat: {
+        answer: `This is a mock response to: "${question || 'your question'}". 
+
+Based on the provided context (${context?.length || 0} documents), here's what I found:
+
+**Key Points:**
+- This is a simulated response for testing purposes
+- No real API calls were made
+- The response simulates what you'd get from the actual AI service
+- Context analysis would normally provide specific insights from your documents
+
+**Sample Analysis:**
+The documents appear to contain various types of content that would be analyzed for relevant information. In a real scenario, this would include specific citations and references to your uploaded materials.
+
+**Next Steps:**
+- Upload real documents to test the actual functionality
+- The mock mode can be disabled by setting NEXT_PUBLIC_MOCK_API=false in your .env.local file`,
+        citations: context?.slice(0, 2).map((item, index) => ({
+          id: `mock-citation-${index}`,
+          chunkId: item.source.chunkId,
+          documentId: item.source.documentId,
+          text: `Sample citation ${index + 1} from ${item.source.documentTitle}`,
+          score: 0.9 - (index * 0.1),
+          page: item.source.page,
+          location: {
+            start: 0,
+            end: 100
+          }
+        })) || [],
+        followUpQuestions: [
+          "Can you provide more details about the main findings?",
+          "What are the key recommendations from this analysis?",
+          "How does this relate to the overall project goals?"
+        ],
+        metadata: {
+          model: 'gpt-oss-20b',
+          tokens: 150,
+          processingTime: 500
+        }
+      },
+      briefing: {
+        answer: `# Mock Summary Report
+
+## Executive Summary
+This is a simulated comprehensive briefing report generated for testing purposes. In a real scenario, this would analyze your uploaded documents and provide structured insights.
+
+---
+
+## Key Findings
+
+### Document Analysis
+| Document Type | Count | Status |
+|---------------|-------|--------|
+| Text Files | ${context?.filter(c => c.source.documentTitle.includes('.txt')).length || 0} | Processed |
+| PDFs | ${context?.filter(c => c.source.documentTitle.includes('.pdf')).length || 0} | Processed |
+| URLs | ${context?.filter(c => c.source.documentTitle.includes('http')).length || 0} | Processed |
+
+### Content Overview
+- **Total Documents**: ${context?.length || 0}
+- **Analysis Date**: ${new Date().toLocaleDateString()}
+- **Processing Method**: Mock API Simulation
+
+---
+
+## Main Insights
+
+### 1. Document Structure
+The uploaded content appears to contain various types of information that would be analyzed for patterns, themes, and key insights.
+
+### 2. Information Quality
+Based on the document count and types, the content would be evaluated for:
+- Completeness of information
+- Relevance to the analysis goals
+- Consistency across sources
+
+### 3. Potential Applications
+The analyzed content could be used for:
+- Research summaries
+- Decision-making support
+- Knowledge management
+- Strategic planning
+
+---
+
+## Risk Assessment
+
+### Low Risk
+- Mock testing environment
+- No sensitive data exposure
+- Controlled testing conditions
+
+### Medium Risk
+- Limited real-world validation
+- Simulated response patterns
+- Testing-only functionality
+
+---
+
+## Recommendations
+
+### Immediate Actions
+1. **Enable Real API**: Set NEXT_PUBLIC_MOCK_API=false in .env.local
+2. **Upload Real Documents**: Test with actual content
+3. **Validate Responses**: Compare mock vs real API behavior
+
+### Testing Strategy
+1. Use mock mode for UI/UX testing
+2. Switch to real API for content validation
+3. Monitor API usage and costs
+
+---
+
+## Conclusion
+This mock briefing demonstrates the system's capability to generate structured reports. For production use, enable the real API and upload actual documents for genuine analysis and insights.
+
+*Generated on ${new Date().toLocaleString()} using mock API simulation*`,
+        citations: context?.map((item, index) => ({
+          id: `mock-briefing-citation-${index}`,
+          chunkId: item.source.chunkId,
+          documentId: item.source.documentId,
+          text: `Mock citation from ${item.source.documentTitle}`,
+          score: 0.95 - (index * 0.05),
+          page: item.source.page,
+          location: {
+            start: 0,
+            end: 100
+          }
+        })) || [],
+        followUpQuestions: [
+          "What are the main themes across all documents?",
+          "Which documents contain the most critical information?",
+          "How can this analysis be applied to current projects?"
+        ],
+        metadata: {
+          model: 'gpt-oss-20b',
+          tokens: 450,
+          processingTime: 2000
+        }
+      }
+    };
+
+    return mockResponses[type];
+  }
+
   async askQuestion(
     question: string,
     context: ContextPassage[],
@@ -32,6 +172,14 @@ export class AIService {
     model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = 'gemini-2.0-flash-exp',
     settings?: Partial<RetrievalSettings>
   ): Promise<AIResponse> {
+    // Use mock response if in mock mode
+    if (this.mockMode) {
+      console.log('🔧 Using mock API for chat question');
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
+      return this.generateMockResponse('chat', question, context);
+    }
+
     const request: AIRequest = {
       question,
       context,
@@ -75,6 +223,14 @@ export class AIService {
     retrievedPassages: ContextPassage[],
     model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = 'gemini-2.0-flash-exp'
   ): Promise<AIResponse> {
+    // Use mock response if in mock mode
+    if (this.mockMode) {
+      console.log('🔧 Using mock API for briefing generation');
+      // Simulate longer API delay for briefing
+      await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
+      return this.generateMockResponse('briefing', undefined, retrievedPassages);
+    }
+
     const request = {
       collectionId,
       exchanges,

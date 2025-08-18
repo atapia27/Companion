@@ -11,7 +11,7 @@ export function EmptyBriefingState({ onSwitchToContext }: EmptyBriefingStateProp
          <FileBarChart className="w-12 h-12 text-neutralharmony-primary-900" />
        </div>
       <h2 className="text-3xl font-bold text-neutralharmony-primary-900 mb-3">
-        Generate Briefings
+        Generate Summary
       </h2>
       <p className="text-neutralharmony-primary-700 text-lg mb-8">
         Create comprehensive reports with key insights, risks, and action items
@@ -25,7 +25,7 @@ export function EmptyBriefingState({ onSwitchToContext }: EmptyBriefingStateProp
           No Content Available
         </h3>
         <p className="text-neutralharmony-primary-700 mb-8 text-center text-base">
-          Please add some documents or URLs first to generate briefings.
+          Please add some documents or URLs first to generate a summary.
         </p>
         <button
           onClick={onSwitchToContext}

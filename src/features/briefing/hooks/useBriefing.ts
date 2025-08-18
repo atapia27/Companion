@@ -323,6 +323,8 @@ While the system demonstrates good security practices in many areas, critical vu
 
       setBriefings(prev => [newBriefing, ...prev]);
       
+      // The skeleton will be hidden by useEffect in the component
+      
       toast({
         title: "Briefing generated successfully!",
         description: "Your comprehensive report is ready.",

@@ -318,7 +318,7 @@ export function getPreferredAIModel(): 'gemini-2.0-flash-exp' | 'gpt-oss-20b' {
   } catch (error) {
     console.warn('Failed to load AI model preference:', error);
   }
-  return 'gemini-2.0-flash-exp'; // Default to Gemini 2.0 Flash
+  return 'gpt-oss-20b'; // Default to GPT-OSS-20B
 }
 
 // Color utilities

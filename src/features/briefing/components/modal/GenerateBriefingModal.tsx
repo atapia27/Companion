@@ -73,17 +73,17 @@ export function GenerateBriefingModal({
 
       onAddBriefing(newBriefing);
       setIsGeneratingLocal(false);
-      setIsGenerating(false);
+      // The hook will handle setting isGenerating to false after state update
     } catch (error) {
       console.error('Error generating briefing:', error);
       setIsGeneratingLocal(false);
-      setIsGenerating(false);
+      setIsGenerating(false); // Set to false on error
       
       // Set error message for display in skeleton
       let errorMessage = 'Failed to generate briefing';
       if (error instanceof Error) {
-        if (error.message.includes('Rate limit exceeded')) {
-          errorMessage = 'API rate limit reached. Please try again later.';
+        if (error.message.includes('Rate limit exceeded') || error.message.includes('429')) {
+          errorMessage = 'API rate limit reached. Please try again later or use mock mode.';
         } else {
           errorMessage = error.message;
         }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 export function useModelSelector() {
-  const [model, setModel] = useState('gemini-2.0-flash-exp');
+  const [model, setModel] = useState('gpt-oss-20b');
   const [showModelSelector, setShowModelSelector] = useState(false);
   const { toast } = useToast();
 
