@@ -1,22 +1,34 @@
 const { OpenAI } = require('openai');
 
-// Initialize OpenRouter client (OpenAI-compatible API)
-const openai = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY,
-  baseURL: 'https://openrouter.ai/api/v1',
-  defaultHeaders: {
-    'HTTP-Referer': process.env.SITE_URL || 'http://localhost:3000',
-    'X-Title': 'AI Knowledge Companion',
-  },
-});
-
 // Model mapping - only free models
 const MODEL_MAPPING = {
   'gemini-2.0-flash-exp': 'google/gemini-2.0-flash-exp:free',
   'gpt-oss-20b': 'openai/gpt-oss-20b:free',
 };
 
+// Initialize OpenRouter client (OpenAI-compatible API)
+function getOpenAIClient() {
+  if (!process.env.OPENROUTER_API_KEY) {
+    throw new Error('OPENROUTER_API_KEY environment variable is not set');
+  }
+  
+  return new OpenAI({
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: 'https://openrouter.ai/api/v1',
+    defaultHeaders: {
+      'HTTP-Referer': process.env.SITE_URL || 'http://localhost:3000',
+      'X-Title': 'AI Knowledge Companion',
+    },
+  });
+}
+
 exports.handler = async (event, context) => {
+  console.log('Chat function called with method:', event.httpMethod);
+  console.log('Environment variables:', {
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? 'SET' : 'NOT SET',
+    SITE_URL: process.env.SITE_URL || 'NOT SET'
+  });
+  
   // Handle CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -132,11 +144,8 @@ Answer:`;
 
 async function callOpenRouter(systemPrompt, userPrompt, model) {
   try {
-    // Debug: Check if API key is available
-    if (!process.env.OPENROUTER_API_KEY) {
-      throw new Error('OPENROUTER_API_KEY environment variable is not set');
-    }
-
+    const openai = getOpenAIClient();
+    
     console.log('Making OpenRouter API call with model:', MODEL_MAPPING[model] || 'deepseek/deepseek-chat-v3-0324:free');
     console.log('API Key available:', !!process.env.OPENROUTER_API_KEY);
     console.log('Base URL:', openai.baseURL);

@@ -20,15 +20,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-[functions."chat"]
-  included_files = ["node_modules/openai/**", "node_modules/@anthropic-ai/**"]
-
-[functions."briefing"]
-  included_files = ["node_modules/openai/**", "node_modules/@anthropic-ai/**"]
-
-[functions."extract-url"]
-  included_files = ["node_modules/node-fetch/**"]
-
 [[headers]]
   for = "/*"
   [headers.values]
