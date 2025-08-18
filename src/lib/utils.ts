@@ -309,11 +309,11 @@ export function loadFromLocalStorage<T>(key: string, defaultValue: T): T {
 }
 
 // AI Model utilities
-export function getPreferredAIModel(): 'gemini-2.0-flash-exp' | 'gpt-oss-20b' {
+export function getPreferredAIModel(): 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api' {
   try {
     const savedModel = localStorage.getItem('ai-model-preference');
-    if (savedModel === 'gemini-2.0-flash-exp' || savedModel === 'gpt-oss-20b') {
-      return savedModel;
+    if (savedModel === 'gemini-2.0-flash-exp' || savedModel === 'gpt-oss-20b' || savedModel === 'mock-api') {
+      return savedModel as 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api';
     }
   } catch (error) {
     console.warn('Failed to load AI model preference:', error);

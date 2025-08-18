@@ -3,12 +3,9 @@ import { AIRequest, AIResponse, ContextPassage, RetrievalSettings } from '@/type
 export class AIService {
   private static instance: AIService;
   private baseUrl: string;
-  private mockMode: boolean;
 
   private constructor() {
     this.baseUrl = process.env.NEXT_PUBLIC_NETLIFY_FUNCTIONS_URL || '/.netlify/functions';
-    // Check localStorage for mock mode setting
-    this.mockMode = typeof window !== 'undefined' && localStorage.getItem('mock-api-enabled') === 'true';
   }
 
   static getInstance(): AIService {
@@ -37,7 +34,7 @@ The documents appear to contain various types of content that would be analyzed 
 
 **Next Steps:**
 - Upload real documents to test the actual functionality
-- The mock mode can be disabled by setting NEXT_PUBLIC_MOCK_API=false in your .env.local file`,
+- Switch to a real AI model in the model selector to use actual API calls`,
         citations: context?.slice(0, 2).map((item, index) => ({
           id: `mock-citation-${index}`,
           chunkId: item.source.chunkId,
@@ -122,13 +119,13 @@ The analyzed content could be used for:
 ## Recommendations
 
 ### Immediate Actions
-1. **Enable Real API**: Set NEXT_PUBLIC_MOCK_API=false in .env.local
+1. **Switch to Real AI Model**: Select GPT-OSS-20B or Gemini 2.0 Flash from the model selector
 2. **Upload Real Documents**: Test with actual content
 3. **Validate Responses**: Compare mock vs real API behavior
 
 ### Testing Strategy
-1. Use mock mode for UI/UX testing
-2. Switch to real API for content validation
+1. Use Mock API for UI/UX testing
+2. Switch to real AI models for content validation
 3. Monitor API usage and costs
 
 ---
@@ -169,22 +166,25 @@ This mock briefing demonstrates the system's capability to generate structured r
     question: string,
     context: ContextPassage[],
     collectionId: string,
-    model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = 'gemini-2.0-flash-exp',
+    model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api' = 'gpt-oss-20b',
     settings?: Partial<RetrievalSettings>
   ): Promise<AIResponse> {
-    // Use mock response if in mock mode
-    if (this.mockMode) {
+    // Use mock response if mock-api is selected
+    if (model === 'mock-api') {
       console.log('🔧 Using mock API for chat question');
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       return this.generateMockResponse('chat', question, context);
     }
 
+    // For real API calls, normalize model
+    const apiModelAsk: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = model as 'gemini-2.0-flash-exp' | 'gpt-oss-20b';
+
     const request: AIRequest = {
       question,
       context,
       collectionId,
-      model,
+      model: apiModelAsk,
       settings: {
         topK: 16,
         scoreThreshold: 0.1,
@@ -221,21 +221,24 @@ This mock briefing demonstrates the system's capability to generate structured r
     collectionId: string,
     exchanges: any[],
     retrievedPassages: ContextPassage[],
-    model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = 'gemini-2.0-flash-exp'
+    model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api' = 'gpt-oss-20b'
   ): Promise<AIResponse> {
-    // Use mock response if in mock mode
-    if (this.mockMode) {
+    // Use mock response if mock-api is selected
+    if (model === 'mock-api') {
       console.log('🔧 Using mock API for briefing generation');
       // Simulate longer API delay for briefing
       await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
       return this.generateMockResponse('briefing', undefined, retrievedPassages);
     }
 
-    const request = {
+    // For real API calls, normalize model
+    const apiModel: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = model as 'gemini-2.0-flash-exp' | 'gpt-oss-20b';
+
+    const request: any = {
       collectionId,
       exchanges,
       retrievedPassages,
-      model,
+      model: apiModel,
       type: 'briefing',
     };
 
@@ -265,17 +268,20 @@ This mock briefing demonstrates the system's capability to generate structured r
     question: string,
     context: ContextPassage[],
     collectionId: string,
-    model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = 'gemini-2.0-flash-exp',
+    model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api' = 'gpt-oss-20b',
     settings?: Partial<RetrievalSettings>,
     onChunk?: (chunk: string) => void,
     onComplete?: (response: AIResponse) => void,
     onError?: (error: Error) => void
   ): Promise<void> {
+    // For real API calls, normalize model
+    const apiModelStream: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' = model as 'gemini-2.0-flash-exp' | 'gpt-oss-20b';
+
     const request: AIRequest = {
       question,
       context,
       collectionId,
-      model,
+      model: apiModelStream,
       settings: {
         topK: 16,
         scoreThreshold: 0.1,

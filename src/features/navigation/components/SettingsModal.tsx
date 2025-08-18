@@ -4,6 +4,8 @@ import { X, Settings as SettingsIcon, Brain, Moon, Sun, Monitor, Plus } from 'lu
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useGlobalModel } from '../hooks';
+import { AI_MODELS, getModelDisplayName } from '@/lib/model-config';
 
 interface SettingsModalProps {
   onClose: () => void;
@@ -11,25 +13,19 @@ interface SettingsModalProps {
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
-  const [model, setModel] = useState('gpt-oss-20b');
+  const { model, handleModelChange } = useGlobalModel();
   const { toast } = useToast();
 
-  // Load settings from localStorage on component mount
+  // Load theme from localStorage on component mount
   useEffect(() => {
-    const savedModel = localStorage.getItem('ai-model-preference');
-    if (savedModel && (savedModel === 'gemini-2.0-flash-exp' || savedModel === 'gpt-oss-20b')) {
-      setModel(savedModel);
-    }
-    
     const savedTheme = localStorage.getItem('theme-preference');
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
       setTheme(savedTheme as 'light' | 'dark' | 'system');
     }
   }, []);
 
-  const handleModelChange = (newModel: string) => {
-    setModel(newModel);
-    localStorage.setItem('ai-model-preference', newModel);
+  const handleModelChangeLocal = (newModel: string) => {
+    handleModelChange(newModel as 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api');
   };
 
   return (
@@ -62,7 +58,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                </label>
                <select
                  value={model}
-                 onChange={(e) => handleModelChange(e.target.value)}
+                 onChange={(e) => handleModelChangeLocal(e.target.value)}
                  className="w-full px-4 py-3 border-2 border-neutralharmony-background-200 rounded-xl bg-white text-neutralharmony-primary-900 focus:outline-none focus:ring-2 focus:ring-neutralharmony-secondary-400 focus:border-neutralharmony-secondary-400 transition-colors appearance-none bg-no-repeat bg-right pr-10"
                  style={{
                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
@@ -70,13 +66,16 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                    backgroundSize: '16px'
                  }}
                >
-                 <option value="gpt-oss-20b">GPT-OSS-20B (Free) - Default</option>
-                 <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Free)</option>
-                 <option value="gpt-4" disabled>GPT-4 (Coming Soon)</option>
-                 <option value="claude" disabled>Claude (Coming Soon)</option>
+                 {AI_MODELS.map((modelOption) => (
+                   <option key={modelOption.value} value={modelOption.value} disabled={modelOption.isDisabled}>
+                     {modelOption.label} ({modelOption.description})
+                   </option>
+                 ))}
                </select>
                <p className="text-sm text-neutralharmony-primary-600 mt-3 leading-relaxed text-start">
-                 Currently using <span className="font-semibold">{model === 'gpt-oss-20b' ? 'GPT-OSS-20B' : 'Gemini 2.0 Flash'}</span> as your AI model.
+                 Currently using <span className="font-semibold">
+                   {getModelDisplayName(model)}
+                 </span> as your AI model.
                </p>
              </div>
            </div>

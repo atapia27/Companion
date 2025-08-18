@@ -1,5 +1,6 @@
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SwapToMockButton } from '@/features/chat/components/SwapToMockButton';
 
 interface BriefingCardErrorProps {
   error: string;
@@ -46,13 +47,14 @@ export function BriefingCardError({ error, onRetry }: BriefingCardErrorProps) {
             <p className="text-red-700 text-sm leading-relaxed max-w-md mx-auto">
               {error}
             </p>
-            <div className="mt-4">
+            <div className="mt-4 flex gap-3 justify-center">
               <Button
                 onClick={onRetry}
                 className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 Try Again
               </Button>
+              <SwapToMockButton />
             </div>
           </div>
         </div>

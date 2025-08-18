@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { FileProcessingResult } from '@/types';
 import { Briefing } from '../hooks';
-import { useModelSelector } from '../../chat/hooks';
+import { useGlobalModel } from '@/features/navigation/hooks';
 import { BriefingHeader, EmptyBriefingState } from './mainDisplay';
 import { BriefingList } from './briefingList';
 import { GenerateBriefingModal } from './modal';
@@ -26,7 +26,7 @@ export function BriefingTab({
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [showGenerateModal, setShowGenerateModal] = useState(false);
-  const { model, showModelSelector, setShowModelSelector, handleModelChange } = useModelSelector();
+  const { model, showModelSelector, setShowModelSelector, handleModelChange } = useGlobalModel();
   
   // Track when generation starts to detect completion
   const generationStartTimeRef = useRef<number | null>(null);
@@ -108,7 +108,6 @@ export function BriefingTab({
           onAddBriefing={onAddBriefing}
           setIsGenerating={setIsGenerating}
           setGenerationError={setGenerationError}
-          model={model}
         />
       )}
     </div>

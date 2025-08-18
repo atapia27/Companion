@@ -7,10 +7,9 @@ interface ChatMessagesContainerProps {
   messages: ChatMessageType[];
   isLoading: boolean;
   onRetryMessage?: (messageId: string) => void;
-  onShowMockData?: () => void;
 }
 
-export function ChatMessagesContainer({ messages, isLoading, onRetryMessage, onShowMockData }: ChatMessagesContainerProps) {
+export function ChatMessagesContainer({ messages, isLoading, onRetryMessage }: ChatMessagesContainerProps) {
   return (
     <div className="flex-1 overflow-y-auto space-y-4 mb-6 p-6 bg-gradient-to-br from-neutralharmony-background-50 to-neutralharmony-background-100 border-2 border-neutralharmony-background-300 rounded-xl shadow-inner messages-container">
       {messages.length === 0 ? (
@@ -34,7 +33,6 @@ export function ChatMessagesContainer({ messages, isLoading, onRetryMessage, onS
                   key={message.id}
                   error={message.content}
                   onRetry={() => onRetryMessage?.(message.id)}
-                  onShowMockData={onShowMockData}
                 />
               );
             }

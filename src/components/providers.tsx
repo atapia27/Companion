@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/toaster';
+import { GlobalModelProvider } from '@/features/navigation/hooks';
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -15,8 +16,10 @@ export function Providers({ children }: ProvidersProps) {
       enableSystem
       disableTransitionOnChange
     >
-      {children}
-      <Toaster />
+      <GlobalModelProvider>
+        {children}
+        <Toaster />
+      </GlobalModelProvider>
     </ThemeProvider>
   );
 }

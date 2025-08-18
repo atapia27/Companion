@@ -1,7 +1,8 @@
 'use client';
 
 import { FileProcessingResult } from '@/types';
-import { useChatMessages, useModelSelector } from '../hooks';
+import { useChatMessages } from '../hooks';
+import { useGlobalModel } from '@/features/navigation/hooks';
 import { ChatHeader } from './ChatHeader';
 import { ChatMessagesContainer } from './ChatMessagesContainer';
 import { ChatInput } from './ChatInput';
@@ -13,8 +14,8 @@ interface ChatTabProps {
 }
 
 export function ChatTab({ processedContent, onSwitchToContext }: ChatTabProps) {
-  const { messages, isLoading, sendMessage, retryMessage, handleShowMockData } = useChatMessages(processedContent);
-  const { model, showModelSelector, setShowModelSelector, handleModelChange } = useModelSelector();
+  const { model, showModelSelector, setShowModelSelector, handleModelChange } = useGlobalModel();
+  const { messages, isLoading, sendMessage, retryMessage, handleShowMockData } = useChatMessages(processedContent, model);
 
   const handleSendMessage = (content: string) => {
     sendMessage(content, model);
@@ -39,7 +40,6 @@ export function ChatTab({ processedContent, onSwitchToContext }: ChatTabProps) {
         messages={messages} 
         isLoading={isLoading} 
         onRetryMessage={retryMessage}
-        onShowMockData={handleShowMockData}
       />
 
       <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />

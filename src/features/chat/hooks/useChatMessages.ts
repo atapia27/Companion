@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { aiService } from '@/lib/ai-service';
 import { FileProcessingResult } from '@/types';
+import { AIModel } from '@/lib/model-config';
 
 export interface ChatMessage {
   id: string;
@@ -10,7 +11,7 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
-export function useChatMessages(processedContent: FileProcessingResult[]) {
+export function useChatMessages(processedContent: FileProcessingResult[], currentModel: AIModel) {
   // Testing flag - set to false when done testing
   const ENABLE_MOCK_CHAT_HISTORY = false;
 
@@ -70,7 +71,7 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
     }
   }, [messages]);
 
-  const sendMessage = async (content: string, model: string) => {
+  const sendMessage = async (content: string, model: AIModel) => {
     if (!content.trim() || isLoading) return;
 
     if (processedContent.length === 0) {
@@ -116,7 +117,7 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
         content.trim(),
         context,
         collectionId,
-        model as 'gemini-2.0-flash-exp' | 'gpt-oss-20b'
+        model
       );
 
       const assistantMessage: ChatMessage = {
@@ -134,9 +135,9 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
       let errorMessage = 'Failed to get answer';
       if (error instanceof Error) {
         if (error.message.includes('Rate limit exceeded')) {
-          errorMessage = 'API rate limit reached. Please try again later.';
+          errorMessage = 'API rate limit reached. Please try again later or use Mock API Model.';
         } else if (error.message.includes('429')) {
-          errorMessage = 'API rate limit exceeded. Please try again later.';
+          errorMessage = 'API rate limit exceeded. Please try again later or use Mock API Model.';
         } else {
           errorMessage = error.message;
         }
@@ -161,8 +162,8 @@ export function useChatMessages(processedContent: FileProcessingResult[]) {
     // Remove the error message
     setMessages(prev => prev.filter(msg => msg.id !== messageId));
     
-    // Retry the last message
-    await sendMessage(lastUserMessage, lastModel);
+    // Retry the last message with the current active model
+    await sendMessage(lastUserMessage, currentModel);
   };
 
   const handleShowMockData = () => {

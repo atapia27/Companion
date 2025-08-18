@@ -7,6 +7,7 @@ import { Briefing } from '../../hooks';
 import { aiService } from '@/lib/ai-service';
 import { Button } from '@/components/ui/button';
 import { ProcessedContentDisplay } from '@/features/context-management/components/ProcessingStatus';
+import { useGlobalModel } from '@/features/navigation/hooks';
 
 interface GenerateBriefingModalProps {
   content: FileProcessingResult[];
@@ -14,7 +15,6 @@ interface GenerateBriefingModalProps {
   onAddBriefing: (briefing: Briefing) => void;
   setIsGenerating: (isGenerating: boolean) => void;
   setGenerationError: (error: string | null) => void;
-  model: string;
 }
 
 export function GenerateBriefingModal({ 
@@ -22,10 +22,10 @@ export function GenerateBriefingModal({
   onClose, 
   onAddBriefing, 
   setIsGenerating, 
-  setGenerationError,
-  model 
+  setGenerationError
 }: GenerateBriefingModalProps) {
   const [isGeneratingLocal, setIsGeneratingLocal] = useState(false);
+  const { model } = useGlobalModel();
 
   const handleGenerate = async () => {
     if (content.length === 0) {
@@ -60,12 +60,12 @@ export function GenerateBriefingModal({
         collectionId,
         [], // No previous exchanges for now
         context,
-        model as 'gemini-2.0-flash-exp' | 'gpt-oss-20b'
+        model
       );
 
       const newBriefing: Briefing = {
         id: Date.now().toString(),
-        title: `Briefing - ${new Date().toLocaleDateString()}`,
+        title: model === 'mock-api' ? `Mock Summary - ${new Date().toLocaleDateString()}` : `Briefing - ${new Date().toLocaleDateString()}`,
         content: response.answer,
         timestamp: new Date(),
         contentCount: content.length,
@@ -83,7 +83,7 @@ export function GenerateBriefingModal({
       let errorMessage = 'Failed to generate briefing';
       if (error instanceof Error) {
         if (error.message.includes('Rate limit exceeded') || error.message.includes('429')) {
-          errorMessage = 'API rate limit reached. Please try again later or use mock mode.';
+          errorMessage = 'API rate limit reached. Please try again later or use Mock API Model.';
         } else {
           errorMessage = error.message;
         }

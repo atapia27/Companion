@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { aiService } from '@/lib/ai-service';
 import { FileProcessingResult } from '@/types';
-import { getPreferredAIModel } from '@/lib/utils';
+import { useGlobalModel } from '@/features/navigation/hooks';
 
 export interface Briefing {
   id: string;
@@ -15,6 +15,7 @@ export interface Briefing {
 export function useBriefing(processedContent: FileProcessingResult[]) {
   // Testing flag - set to true to enable mock briefings for testing
   const ENABLE_MOCK_BRIEFINGS = true;
+  const { model } = useGlobalModel();
 
   const mockBriefings: Briefing[] = [
     {
@@ -310,12 +311,12 @@ While the system demonstrates good security practices in many areas, critical vu
         collectionId,
         [], // No previous exchanges for now
         context,
-        getPreferredAIModel()
+        model
       );
 
       const newBriefing: Briefing = {
         id: Date.now().toString(),
-        title: `Briefing - ${new Date().toLocaleDateString()}`,
+        title: model === 'mock-api' ? `Mock Summary - ${new Date().toLocaleDateString()}` : `Briefing - ${new Date().toLocaleDateString()}`,
         content: response.answer,
         timestamp: new Date(),
         contentCount: processedContent.length,

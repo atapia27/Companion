@@ -169,7 +169,7 @@ export interface AIRequest {
   question: string;
   context: ContextPassage[];
   collectionId: string;
-  model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b';
+  model: 'gemini-2.0-flash-exp' | 'gpt-oss-20b' | 'mock-api';
   settings: RetrievalSettings;
 }
 
