@@ -1,4 +1,4 @@
-// Core data types for the AI Knowledge Companion
+// Core data types for the AI Document Companion
 
 export interface User {
   id: string;

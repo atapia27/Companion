@@ -37,7 +37,7 @@ export function Header({ activeNavTab, onNavTabChange }: HeaderProps) {
               <Brain className="w-6 h-6 text-neutralharmony-primary-900" />
             </div>
             <h1 className="text-2xl font-bold text-neutralharmony-primary-900">
-              AI Knowledge Companion
+              AI Document Companion
             </h1>
           </div>
 

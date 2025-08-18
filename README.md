@@ -1,8 +1,8 @@
-# AI Knowledge Companion - Evidence-Based Analysis Platform
+# AI Document Companion - Evidence-Based Analysis Platform
 
 ## Project Overview
 
-**AI Knowledge Companion** is a full-stack web application that provides **evidence-based AI analysis** with proper document citation. Unlike generic AI responses, this platform ensures every insight, claim, and recommendation is grounded in your specific documents with clear source citations.
+**AI Document Companion** is a full-stack web application that provides **evidence-based AI analysis** with proper document citation. Unlike generic AI responses, this platform ensures every insight, claim, and recommendation is grounded in your specific documents with clear source citations.
 
 ### Core Mission
 
@@ -154,7 +154,7 @@ This project demonstrates:
 
 ## Live Demo
 
-**[AI Knowledge Companion](https://ai-document-companion.netlify.app/)**
+**[AI Document Companion](https://ai-document-companion.netlify.app/)**
 
 ## Repository
 

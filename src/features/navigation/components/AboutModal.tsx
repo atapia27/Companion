@@ -12,7 +12,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto shadow-2xl border border-neutralharmony-background-200">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-neutralharmony-primary-900">About AI Knowledge Companion</h2>
+          <h2 className="text-3xl font-bold text-neutralharmony-primary-900">About AI Document Companion</h2>
           <Button
             onClick={onClose}
             variant="close"

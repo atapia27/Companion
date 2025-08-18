@@ -25,7 +25,7 @@ export function useBriefing(processedContent: FileProcessingResult[]) {
 
 
 ## Executive Summary
-This analysis examines the technical architecture of our AI Knowledge Companion system, identifying key strengths and areas for improvement.
+This analysis examines the technical architecture of our AI Document Companion system, identifying key strengths and areas for improvement.
 
 ---
 
