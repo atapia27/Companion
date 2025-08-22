@@ -28,7 +28,7 @@ export function ChatTab({ processedContent, onSwitchToContext }: ChatTabProps) {
 
   // Show chat interface when content is available
   return (
-    <div className="max-w-6xl mx-auto h-[calc(100vh-250px)] flex flex-col">
+    <div className="max-w-6xl mx-auto h-[calc(100vh-200px)] flex flex-col">
       <ChatHeader
         model={model}
         showModelSelector={showModelSelector}
@@ -42,7 +42,9 @@ export function ChatTab({ processedContent, onSwitchToContext }: ChatTabProps) {
         onRetryMessage={retryMessage}
       />
 
-      <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+      <div className="mt-auto pt-2">
+        <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+      </div>
     </div>
   );
 }

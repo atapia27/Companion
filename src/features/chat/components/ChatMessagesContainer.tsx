@@ -11,7 +11,7 @@ interface ChatMessagesContainerProps {
 
 export function ChatMessagesContainer({ messages, isLoading, onRetryMessage }: ChatMessagesContainerProps) {
   return (
-    <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-4 sm:mb-6 p-3 sm:p-6 bg-gradient-to-br from-neutralharmony-background-50 to-neutralharmony-background-100 border-2 border-neutralharmony-background-300 rounded-lg sm:rounded-xl shadow-inner messages-container">
+    <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-2 sm:mb-3 p-3 sm:p-6 bg-gradient-to-br from-neutralharmony-background-50 to-neutralharmony-background-100 border-2 border-neutralharmony-background-300 rounded-lg sm:rounded-xl shadow-inner messages-container">
       {messages.length === 0 ? (
         <div className="flex flex-col justify-center items-center h-full text-center">
           <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-neutralharmony-secondary-200 to-neutralharmony-secondary-300 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg">
