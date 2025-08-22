@@ -211,14 +211,7 @@ export interface ProcessingProgress {
   error?: string;
 }
 
-// UI and component types
-export interface Toast {
-  id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  title: string;
-  message?: string;
-  duration?: number;
-}
+
 
 export interface ModalState {
   isOpen: boolean;

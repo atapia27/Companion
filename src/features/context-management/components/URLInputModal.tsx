@@ -1,8 +1,9 @@
 'use client';
 
-import { Link, X, Loader2, TestTube } from 'lucide-react';
+import { Link, Loader2, TestTube } from 'lucide-react';
 import { FileProcessingResult } from '@/types';
 import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/ui/Modal';
 import { useURLInput } from '../hooks';
 import { sampleURLs } from '../utils';
 import { ProcessingStatus, InlineStatusMessage } from './ProcessingStatus';
@@ -26,33 +27,23 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
   } = useURLInput({ onURLProcessed: onURLProcessedAction, existingContent });
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[85vh] overflow-y-auto border-2 border-neutralharmony-background-300 shadow-2xl">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-xl flex items-center justify-center shadow-lg">
-              <Link className="w-5 h-5 text-neutralharmony-primary-900" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-neutralharmony-primary-900">Add URL</h2>
-              <p className="text-neutralharmony-primary-600 text-sm">Extract content from web pages</p>
-            </div>
-          </div>
-          <Button
-            onClick={onCloseAction}
-            variant="close"
-            size="sm"
-            className="rounded-xl p-2"
-          >
-            <X className="w-5 h-5" />
-            <span className="sr-only">Close</span>
-          </Button>
-        </div>
+    <Modal
+      isOpen={true}
+      onClose={onCloseAction}
+      title="Add URL"
+      icon={<Link className="w-4 h-4 sm:w-5 sm:h-5 text-white" />}
+      iconColor="from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500"
+    >
+      <div className="space-y-4 sm:space-y-6">
+        {/* Description */}
+        <p className="text-neutralharmony-primary-600 text-sm">
+          Extract content from web pages
+        </p>
 
         {/* URL Input Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="url" className="block text-sm font-bold text-neutralharmony-primary-900 mb-2">
+            <label htmlFor="url" className="block text-xs sm:text-sm font-bold text-neutralharmony-primary-900 mb-2">
               URL *
             </label>
             <input
@@ -62,40 +53,42 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com/article"
               required
-              className="w-full px-3 py-2 border-2 border-neutralharmony-background-300 rounded-xl bg-white text-neutralharmony-primary-900 placeholder:text-neutralharmony-primary-500 focus:outline-none focus:ring-2 focus:ring-neutralharmony-primary-500 focus:border-neutralharmony-primary-400 transition-all duration-200"
+              className="w-full px-3 py-2.5 sm:py-2 border-2 border-neutralharmony-background-300 rounded-xl bg-white text-xs sm:text-sm text-neutralharmony-primary-900 placeholder:text-neutralharmony-primary-500 focus:outline-none focus:ring-2 focus:ring-neutralharmony-primary-500 focus:border-neutralharmony-primary-400 transition-all duration-200"
             />
           </div>
 
           <Button
             type="submit"
             disabled={isProcessing || !url.trim()}
-            className="w-full bg-gradient-to-r from-neutralharmony-tertiary-500 to-neutralharmony-tertiary-600 hover:from-neutralharmony-tertiary-600 hover:to-neutralharmony-tertiary-700 text-neutralharmony-primary-900 px-4 py-2 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-300"
+            className="w-full bg-gradient-to-r from-neutralharmony-tertiary-500 to-neutralharmony-tertiary-600 hover:from-neutralharmony-tertiary-600 hover:to-neutralharmony-tertiary-700 text-neutralharmony-primary-900 px-4 py-2.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-300"
           >
             {isProcessing ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
+                <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 mr-2 animate-spin" />
+                <span className="text-xs sm:text-sm">Processing...</span>
               </>
             ) : (
               <>
-                <Link className="w-4 h-4 mr-2" />
-                Extract Content
+                <Link className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                <span className="text-xs sm:text-sm">Extract Content</span>
               </>
             )}
           </Button>
         </form>
 
         {/* Test URLs Section - Compact Grid Layout */}
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center space-x-2">
-              <div className="w-6 h-6 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-lg flex items-center justify-center">
-                <TestTube className="w-3 h-3 text-neutralharmony-primary-900" />
+        <div className="mt-4 sm:mt-6">
+          <div className="mb-3">
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-lg flex items-center justify-center">
+                <TestTube className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-neutralharmony-primary-900" />
               </div>
-              <h3 className="text-base font-bold text-neutralharmony-primary-900">
+              <h3 className="text-sm sm:text-base font-bold text-neutralharmony-primary-900">
                 Test URLs
               </h3>
-              {/* Inline Status Messages */}
+            </div>
+            {/* Inline Status Messages */}
+            <div className="space-y-1">
               {error && (
                 <InlineStatusMessage
                   key="error-message"
@@ -114,9 +107,6 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
                 disabled={isProcessing}
                 className="flex flex-col items-center space-y-2 p-3 bg-white border-2 border-neutralharmony-background-300 rounded-lg hover:border-neutralharmony-tertiary-400 hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group"
               >
-                <div className="w-8 h-8 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-lg flex items-center justify-center group-hover:from-neutralharmony-tertiary-500 group-hover:to-neutralharmony-tertiary-600 transition-all duration-300 shadow-sm">
-                  <Link className="w-4 h-4 text-neutralharmony-primary-900" />
-                </div>
                 <div className="text-center">
                   <p className="font-semibold text-neutralharmony-primary-900 text-xs truncate w-full">
                     {sampleURL.name}
@@ -148,6 +138,6 @@ export function URLInputModal({ onURLProcessedAction, onCloseAction, existingCon
           </Button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

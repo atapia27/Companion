@@ -1,7 +1,6 @@
 'use client';
 
 import { ThemeProvider } from 'next-themes';
-import { Toaster } from '@/components/ui/toaster';
 import { GlobalModelProvider } from '@/features/navigation/hooks';
 
 interface ProvidersProps {
@@ -18,7 +17,6 @@ export function Providers({ children }: ProvidersProps) {
     >
       <GlobalModelProvider>
         {children}
-        <Toaster />
       </GlobalModelProvider>
     </ThemeProvider>
   );

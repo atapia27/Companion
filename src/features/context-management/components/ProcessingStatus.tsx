@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle, FileText, Link as LinkIcon, X } from 'lucide-react';
 import { FileProcessingResult, ProcessingProgress } from '@/types';
+import { getFileTypeIcon } from '../utils';
 
 interface ProcessingStatusProps {
   error: string | null;
@@ -41,20 +42,20 @@ export function ProcessingStatus({
       {/* Processed Items - Compact Badge Layout */}
       {processedItems.length > 0 && (
         <div className="mt-4">
-                     <div className="flex items-center justify-between mb-3">
-             <div className="flex items-center space-x-2">
-               <div className={`w-5 h-5 bg-gradient-to-br rounded-lg flex items-center justify-center ${
-                 itemType === 'file' 
-                   ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
-                   : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500'
-               }`}>
-                 <IconComponent className="w-3 h-3 text-neutralharmony-background-50" />
-               </div>
-               <h3 className="text-sm font-bold text-neutralharmony-primary-900">
-                 Processed {itemLabel} ({processedItems.length})
-               </h3>
-             </div>
-           </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-2">
+              <div className={`w-5 h-5 bg-gradient-to-br rounded-lg flex items-center justify-center ${
+                itemType === 'file' 
+                  ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
+                  : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500'
+              }`}>
+                <IconComponent className="w-3 h-3 text-neutralharmony-background-50" />
+              </div>
+              <h3 className="text-sm font-bold text-neutralharmony-primary-900">
+                Processed {itemLabel} ({processedItems.length})
+              </h3>
+            </div>
+          </div>
           
           {/* Compact Badge Layout */}
           <div className="flex flex-wrap gap-2">
@@ -63,12 +64,11 @@ export function ProcessingStatus({
                 key={index}
                 className="flex items-center space-x-2 px-3 py-2 bg-white border-2 border-neutralharmony-background-300 rounded-lg hover:border-neutralharmony-primary-400 transition-all duration-200"
               >
-                <div className={`w-4 h-4 bg-gradient-to-br rounded flex items-center justify-center ${
-                  itemType === 'file' 
-                    ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
-                    : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500'
-                }`}>
-                  <IconComponent className="w-2 h-2 text-neutralharmony-background-50" />
+                <div className="w-4 h-4 bg-white border border-gray-200 rounded flex items-center justify-center">
+                  {itemType === 'file' 
+                    ? getFileTypeIcon(item.metadata.type || '', item.metadata.filename)
+                    : <LinkIcon className="w-2 h-2 text-neutralharmony-primary-900" />
+                  }
                 </div>
                 <span className="font-medium text-neutralharmony-primary-900 text-xs truncate max-w-24">
                   {item.metadata.customName || item.metadata.filename || item.metadata.summary || `${itemLabelSingular} ${index + 1}`}
@@ -129,21 +129,17 @@ export function ProcessedContentDisplay({
       <div className="flex flex-wrap gap-2">
         {processedItems.map((item, index) => {
           const isFile = item.metadata.filename;
-          const itemGradient = isFile 
-            ? 'from-neutralharmony-primary-400 to-neutralharmony-primary-500'
-            : 'from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500';
           
           return (
             <div
               key={index}
               className="flex items-center space-x-2 px-3 py-2 bg-white border-2 border-neutralharmony-background-300 rounded-lg hover:border-neutralharmony-primary-400 transition-all duration-200"
             >
-              <div className={`w-4 h-4 bg-gradient-to-br rounded flex items-center justify-center ${itemGradient}`}>
-                {isFile ? (
-                  <FileText className="w-2 h-2 text-neutralharmony-background-50" />
-                ) : (
-                  <LinkIcon className="w-2 h-2 text-neutralharmony-background-50" />
-                )}
+              <div className="w-4 h-4 bg-white border border-gray-200 rounded flex items-center justify-center">
+                {isFile 
+                  ? getFileTypeIcon(item.metadata.type || '', item.metadata.filename)
+                  : <LinkIcon className="w-2 h-2 text-neutralharmony-primary-900" />
+                }
               </div>
               <span className="font-medium text-neutralharmony-primary-900 text-xs truncate max-w-24">
                 {item.metadata.customName || item.metadata.filename || item.metadata.summary || `${isFile ? 'File' : 'URL'} ${index + 1}`}
@@ -205,14 +201,16 @@ export function InlineStatusMessage({
   if (!isVisible) return null;
 
   return (
-    <div className={`flex items-center space-x-2 px-3 py-1 border-2 rounded-lg text-xs font-medium transition-opacity duration-300 flex-shrink-0 min-w-0 ${getStyles()}`}>
-      {type === 'success' && <CheckCircle className="w-3 h-3 flex-shrink-0" />}
-      {type === 'error' && <X className="w-3 h-3 flex-shrink-0" />}
-      {type === 'progress' && <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin flex-shrink-0" />}
-      <span className="whitespace-nowrap overflow-hidden text-ellipsis flex-1 min-w-0">{message}</span>
+    <div className={`flex items-start space-x-2 px-2 sm:px-3 py-1.5 sm:py-1 border-2 rounded-lg text-xs font-medium transition-opacity duration-300 max-w-full ${getStyles()}`}>
+      <div className="flex-shrink-0 mt-0.5">
+        {type === 'success' && <CheckCircle className="w-3 h-3" />}
+        {type === 'error' && <X className="w-3 h-3" />}
+        {type === 'progress' && <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />}
+      </div>
+      <span className="flex-1 min-w-0 break-words leading-relaxed">{message}</span>
       <button
         onClick={handleClose}
-        className="ml-1 p-0.5 hover:bg-black/10 rounded transition-colors flex-shrink-0"
+        className="flex-shrink-0 ml-1 p-0.5 hover:bg-black/10 rounded transition-colors"
       >
         <X className="w-2.5 h-2.5" />
       </button>

@@ -12,7 +12,7 @@ import { FileProcessingResult } from '@/types';
 import { useBriefing, Briefing } from '@/features/briefing/hooks';
 
 // Feature-based imports
-import { Header, TabNavigation, TabType, NavTabType } from '@/features/navigation';
+import { Navbar, TabNavigation, TabType, NavTabType } from '@/features/navigation';
 import { ContextManagementTab } from '@/features/context-management';
 import { ChatTab } from '@/features/chat';
 import { BriefingTab } from '@/features/briefing';
@@ -55,14 +55,14 @@ export default function AppPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <Header 
+      {/* Navbar */}
+      <Navbar 
         activeNavTab={activeNavTab}
         onNavTabChange={setActiveNavTab}
       />
 
       {/* Main Content */}
-      <div className="w-full py-8 px-72">
+      <div className="w-full py-8 px-4 md:px-8 lg:px-16 xl:px-72">
           {/* Tab Navigation */}
           <TabNavigation 
             activeTab={activeTab}

@@ -49,12 +49,65 @@ ${briefing.content}
   return (
     <div className="bg-white border-2 border-neutralharmony-background-300 rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b-2 border-neutralharmony-background-200">
-        <div className="flex items-center justify-between">
+      <div className="p-3 sm:p-4 border-b-2 border-neutralharmony-background-200">
+        {/* Mobile: Stacked layout */}
+        <div className="sm:hidden">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center space-x-2 min-w-0 flex-1">
+              <div className="w-7 h-7 bg-gradient-to-br from-neutralharmony-tertiary-200 to-neutralharmony-tertiary-300 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FileBarChart className="w-3.5 h-3.5 text-neutralharmony-tertiary-600" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-semibold text-neutralharmony-primary-900 text-sm truncate">{briefing.title}</h3>
+                <div className="flex items-center space-x-3 text-xs text-neutralharmony-primary-600 mt-1">
+                  <div className="flex items-center space-x-1">
+                    <Calendar className="w-3 h-3" />
+                    <span>{briefing.timestamp.toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <FileText className="w-3 h-3" />
+                    <span>{briefing.contentCount} items</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile: Action buttons in a row */}
+          <div className="flex items-center justify-between">
+            <Button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="flex-1 bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-2 py-2 transition-all duration-200 mr-2"
+            >
+              <Eye className="w-4 h-4" />
+            </Button>
+            <Button
+              onClick={handleCopyBriefing}
+              className="flex-1 bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-2 py-2 transition-all duration-200 mr-2"
+            >
+              {copied ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+            </Button>
+            <Button
+              onClick={handleDownloadBriefing}
+              className="flex-1 bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-2 py-2 transition-all duration-200 mr-2"
+            >
+              <Download className="w-4 h-4" />
+            </Button>
+            <Button
+              onClick={() => onDelete(briefing.id)}
+              className="flex-1 bg-white border-2 border-red-300 hover:border-red-400 hover:bg-red-50 text-red-600 hover:text-red-700 rounded-lg px-2 py-2 transition-all duration-200"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop: Original layout */}
+        <div className="hidden sm:flex items-center justify-between">
           <div className="flex items-center space-x-3">
-                         <div className="w-8 h-8 bg-gradient-to-br from-neutralharmony-tertiary-200 to-neutralharmony-tertiary-300 rounded-lg flex items-center justify-center">
-               <FileBarChart className="w-4 h-4 text-neutralharmony-tertiary-600" />
-             </div>
+            <div className="w-8 h-8 bg-gradient-to-br from-neutralharmony-tertiary-200 to-neutralharmony-tertiary-300 rounded-lg flex items-center justify-center">
+              <FileBarChart className="w-4 h-4 text-neutralharmony-tertiary-600" />
+            </div>
             <div>
               <h3 className="font-semibold text-neutralharmony-primary-900">{briefing.title}</h3>
               <div className="flex items-center space-x-4 text-sm text-neutralharmony-primary-600">
@@ -70,24 +123,24 @@ ${briefing.content}
             </div>
           </div>
           <div className="flex items-center space-x-2">
-                         <Button
-               onClick={() => setIsExpanded(!isExpanded)}
-               className="bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-3 py-1 transition-all duration-200"
-             >
-               <Eye className="w-4 h-4" />
-             </Button>
-             <Button
-               onClick={handleCopyBriefing}
-               className="bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-3 py-1 transition-all duration-200"
-             >
-               {copied ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
-             </Button>
-             <Button
-               onClick={handleDownloadBriefing}
-               className="bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-3 py-1 transition-all duration-200"
-             >
-               <Download className="w-4 h-4" />
-             </Button>
+            <Button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-3 py-1 transition-all duration-200"
+            >
+              <Eye className="w-4 h-4" />
+            </Button>
+            <Button
+              onClick={handleCopyBriefing}
+              className="bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-3 py-1 transition-all duration-200"
+            >
+              {copied ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+            </Button>
+            <Button
+              onClick={handleDownloadBriefing}
+              className="bg-white border-2 border-neutralharmony-background-300 hover:border-neutralharmony-tertiary-300 hover:bg-neutralharmony-background-50 text-neutralharmony-primary-600 hover:text-neutralharmony-primary-900 rounded-lg px-3 py-1 transition-all duration-200"
+            >
+              <Download className="w-4 h-4" />
+            </Button>
             <Button
               onClick={() => onDelete(briefing.id)}
               className="bg-white border-2 border-red-300 hover:border-red-400 hover:bg-red-50 text-red-600 hover:text-red-700 rounded-lg px-3 py-1 transition-all duration-200"
@@ -101,98 +154,98 @@ ${briefing.content}
       {/* Content */}
       {isExpanded && (
         <div className="bg-gradient-to-br from-neutralharmony-background-50 to-neutralharmony-background-100">
-          <div className="max-h-96 overflow-y-auto pr-4">
-            <div className="p-4">
+          <div className="max-h-96 overflow-y-auto pr-2 sm:pr-4">
+            <div className="p-3 sm:p-4">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               className="text-sm text-neutralharmony-primary-900"
-                             components={{
-                 table: ({ children }) => (
-                   <div className="overflow-x-auto my-6">
-                     <table className="min-w-full border-collapse border-2 border-neutralharmony-background-300 rounded-xl shadow-sm">
-                       {children}
-                     </table>
-                   </div>
-                 ),
-                 thead: ({ children }) => (
-                   <thead className="bg-gradient-to-r from-neutralharmony-tertiary-50 to-neutralharmony-tertiary-100">
-                     {children}
-                   </thead>
-                 ),
-                 tbody: ({ children }) => (
-                   <tbody className="bg-white">
-                     {children}
-                   </tbody>
-                 ),
-                 tr: ({ children }) => (
-                   <tr className="hover:bg-neutralharmony-background-50 transition-colors duration-150">
-                     {children}
-                   </tr>
-                 ),
-                 th: ({ children }) => (
-                   <th className="border-2 border-neutralharmony-background-300 px-4 py-3 font-semibold text-left text-neutralharmony-primary-900 text-sm">
-                     {children}
-                   </th>
-                 ),
-                 td: ({ children }) => (
-                   <td className="border-2 border-neutralharmony-background-300 px-4 py-3 text-neutralharmony-primary-700 text-sm">
-                     {children}
-                   </td>
-                 ),
-                                 h1: ({ children }) => (
-                   <h1 className="text-2xl font-bold text-neutralharmony-primary-900 mb-6 mt-8 first:mt-0 border-b-2 border-neutralharmony-background-300 pb-2">
-                     {children}
-                   </h1>
-                 ),
-                 h2: ({ children }) => (
-                   <h2 className="text-xl font-semibold text-neutralharmony-primary-900 mb-4 mt-6 border-b border-neutralharmony-background-200 pb-1">
-                     {children}
-                   </h2>
-                 ),
-                 h3: ({ children }) => (
-                   <h3 className="text-lg font-medium text-neutralharmony-primary-900 mb-3 mt-5 text-neutralharmony-tertiary-700">
-                     {children}
-                   </h3>
-                 ),
+              components={{
+                table: ({ children }) => (
+                  <div className="overflow-x-auto my-4 sm:my-6">
+                    <table className="min-w-full border-collapse border-2 border-neutralharmony-background-300 rounded-xl shadow-sm">
+                      {children}
+                    </table>
+                  </div>
+                ),
+                thead: ({ children }) => (
+                  <thead className="bg-gradient-to-r from-neutralharmony-tertiary-50 to-neutralharmony-tertiary-100">
+                    {children}
+                  </thead>
+                ),
+                tbody: ({ children }) => (
+                  <tbody className="bg-white">
+                    {children}
+                  </tbody>
+                ),
+                tr: ({ children }) => (
+                  <tr className="hover:bg-neutralharmony-background-50 transition-colors duration-150">
+                    {children}
+                  </tr>
+                ),
+                th: ({ children }) => (
+                  <th className="border-2 border-neutralharmony-background-300 px-2 sm:px-4 py-2 sm:py-3 font-semibold text-left text-neutralharmony-primary-900 text-xs sm:text-sm">
+                    {children}
+                  </th>
+                ),
+                td: ({ children }) => (
+                  <td className="border-2 border-neutralharmony-background-300 px-2 sm:px-4 py-2 sm:py-3 text-neutralharmony-primary-700 text-xs sm:text-sm">
+                    {children}
+                  </td>
+                ),
+                h1: ({ children }) => (
+                  <h1 className="text-xl sm:text-2xl font-bold text-neutralharmony-primary-900 mb-4 sm:mb-6 mt-6 sm:mt-8 first:mt-0 border-b-2 border-neutralharmony-background-300 pb-2">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-lg sm:text-xl font-semibold text-neutralharmony-primary-900 mb-3 sm:mb-4 mt-4 sm:mt-6 border-b border-neutralharmony-background-200 pb-1">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-base sm:text-lg font-medium text-neutralharmony-primary-900 mb-2 sm:mb-3 mt-4 sm:mt-5 text-neutralharmony-tertiary-700">
+                    {children}
+                  </h3>
+                ),
                 p: ({ children }) => (
-                  <p className="text-neutralharmony-primary-700 mb-3 leading-relaxed">
+                  <p className="text-neutralharmony-primary-700 mb-2 sm:mb-3 leading-relaxed text-sm">
                     {children}
                   </p>
                 ),
-                                 ul: ({ children }) => (
-                   <ul className="list-none text-neutralharmony-primary-700 mb-4 space-y-2">
-                     {children}
-                   </ul>
-                 ),
-                 ol: ({ children }) => (
-                   <ol className="list-decimal list-inside text-neutralharmony-primary-700 mb-4 space-y-2">
-                     {children}
-                   </ol>
-                 ),
-                                   li: ({ children }) => (
-                    <li className="text-neutralharmony-primary-700 before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
-                      {children}
-                    </li>
-                  ),
+                ul: ({ children }) => (
+                  <ul className="list-none text-neutralharmony-primary-700 mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal list-inside text-neutralharmony-primary-700 mb-3 sm:mb-4 space-y-1.5 sm:space-y-2">
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => (
+                  <li className="text-neutralharmony-primary-700 before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block text-sm">
+                    {children}
+                  </li>
+                ),
                 blockquote: ({ children }) => (
-                  <blockquote className="border-l-4 border-neutralharmony-tertiary-400 pl-4 italic text-neutralharmony-primary-600 mb-3 bg-neutralharmony-tertiary-50 py-2 rounded-r-lg">
+                  <blockquote className="border-l-4 border-neutralharmony-tertiary-400 pl-3 sm:pl-4 italic text-neutralharmony-primary-600 mb-2 sm:mb-3 bg-neutralharmony-tertiary-50 py-2 rounded-r-lg">
                     {children}
                   </blockquote>
                 ),
                 code: ({ children, className }) => {
                   const isInline = !className;
                   return isInline ? (
-                    <code className="bg-neutralharmony-tertiary-100 px-2 py-1 rounded text-sm font-mono text-neutralharmony-primary-800">
+                    <code className="bg-neutralharmony-tertiary-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs sm:text-sm font-mono text-neutralharmony-primary-800">
                       {children}
                     </code>
                   ) : (
-                    <pre className="bg-neutralharmony-tertiary-100 p-4 rounded-xl overflow-x-auto border-2 border-neutralharmony-background-300">
-                      <code className="text-sm font-mono text-neutralharmony-primary-800">{children}</code>
+                    <pre className="bg-neutralharmony-tertiary-100 p-3 sm:p-4 rounded-xl overflow-x-auto border-2 border-neutralharmony-background-300">
+                      <code className="text-xs sm:text-sm font-mono text-neutralharmony-primary-800">{children}</code>
                     </pre>
                   );
                 },
                 hr: () => (
-                  <hr className="border-t-2 border-neutralharmony-background-300 my-6" />
+                  <hr className="border-t-2 border-neutralharmony-background-300 my-4 sm:my-6" />
                 ),
               }}
             >

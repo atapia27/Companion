@@ -1,5 +1,4 @@
 import { useState, useEffect, createContext, useContext } from 'react';
-import { useToast } from '@/hooks/use-toast';
 import { AIModel, DEFAULT_MODEL, getModelDisplayName } from '@/lib/model-config';
 
 interface GlobalModelContextType {
@@ -15,7 +14,6 @@ const GlobalModelContext = createContext<GlobalModelContextType | undefined>(und
 export function GlobalModelProvider({ children }: { children: React.ReactNode }) {
   const [model, setModel] = useState<AIModel>(DEFAULT_MODEL);
   const [showModelSelector, setShowModelSelector] = useState(false);
-  const { toast } = useToast();
 
   // Load model preference from localStorage on component mount
   useEffect(() => {
@@ -29,10 +27,6 @@ export function GlobalModelProvider({ children }: { children: React.ReactNode })
     setModel(newModel);
     localStorage.setItem('ai-model-preference', newModel);
     setShowModelSelector(false);
-    toast({
-      title: "Model Updated",
-      description: `Switched to ${getModelDisplayName(newModel)}`,
-    });
   };
 
   return (

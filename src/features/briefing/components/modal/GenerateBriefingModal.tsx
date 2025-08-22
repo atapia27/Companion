@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { X, FileBarChart, Loader2 } from 'lucide-react';
+import { FileBarChart, Loader2 } from 'lucide-react';
 import { FileProcessingResult} from '@/types';
 import { Briefing } from '../../hooks';
 import { aiService } from '@/lib/ai-service';
 import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/ui/Modal';
 import { ProcessedContentDisplay } from '@/features/context-management/components/ProcessingStatus';
 import { useGlobalModel } from '@/features/navigation/hooks';
 
@@ -65,7 +66,7 @@ export function GenerateBriefingModal({
 
       const newBriefing: Briefing = {
         id: Date.now().toString(),
-        title: model === 'mock-api' ? `Mock Summary - ${new Date().toLocaleDateString()}` : `Briefing - ${new Date().toLocaleDateString()}`,
+        title: model === 'mock-api' ? `Mock Summary` : `Summary`,
         content: response.answer,
         timestamp: new Date(),
         contentCount: content.length,
@@ -93,27 +94,17 @@ export function GenerateBriefingModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-2xl mx-4 border-2 border-neutralharmony-background-300 shadow-xl">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-                         <div className="w-10 h-10 bg-gradient-to-br from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500 rounded-xl flex items-center justify-center shadow-lg">
-               <FileBarChart className="w-5 h-5 text-neutralharmony-background-50" />
-             </div>
-            <h2 className="text-2xl font-bold text-neutralharmony-primary-900">Generate New Briefing</h2>
-          </div>
-          <Button
-            onClick={onClose}
-            variant="close"
-            size="sm"
-            className="rounded-xl"
-          >
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
-
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="Generate Summary"
+      icon={<FileBarChart className="w-4 h-4 sm:w-5 sm:h-5 text-white" />}
+      iconColor="from-neutralharmony-tertiary-400 to-neutralharmony-tertiary-500"
+      maxWidth="max-w-2xl"
+    >
+      <div className="space-y-4 sm:space-y-6">
         {/* Content Summary */}
-        <div className="mb-6 p-4 bg-gradient-to-br from-neutralharmony-background-50 to-neutralharmony-background-100 border-2 border-neutralharmony-background-300 rounded-xl shadow-inner">
+        <div className="p-3 sm:p-4 bg-gradient-to-br from-neutralharmony-background-50 to-neutralharmony-background-100 border-2 border-neutralharmony-background-300 rounded-xl shadow-inner">
           <ProcessedContentDisplay 
             processedItems={content} 
             itemType="mixed" 
@@ -121,54 +112,54 @@ export function GenerateBriefingModal({
         </div>
 
         {/* Generate Button */}
-        <div className="text-center mb-6">
+        <div className="text-center">
           <Button
             onClick={handleGenerate}
             disabled={isGeneratingLocal}
-                         className="bg-gradient-to-r from-neutralharmony-tertiary-500 to-neutralharmony-tertiary-600 hover:from-neutralharmony-tertiary-600 hover:to-neutralharmony-tertiary-700 text-neutralharmony-background-50 px-8 py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="w-full sm:w-auto bg-gradient-to-r from-neutralharmony-tertiary-500 to-neutralharmony-tertiary-600 hover:from-neutralharmony-tertiary-600 hover:to-neutralharmony-tertiary-700 text-neutralharmony-background-50 px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {isGeneratingLocal ? (
-              <div className="flex items-center space-x-2">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Generating Briefing...</span>
+              <div className="flex items-center justify-center space-x-2">
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                <span className="text-sm sm:text-base">Generating Briefing...</span>
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
-                <FileBarChart className="w-5 h-5 text-white" />
-                <span className="text-white">Generate Comprehensive Briefing</span>
+              <div className="flex items-center justify-center space-x-2">
+                <FileBarChart className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <span className="text-sm sm:text-base text-white">Generate Summary</span>
               </div>
             )}
           </Button>
-          <p className="text-xs text-neutralharmony-primary-600 mt-4 mx-auto leading-relaxed">
+          <p className="text-xs text-neutralharmony-primary-600 mt-3 sm:mt-4 mx-auto leading-relaxed max-w-sm">
             AI will analyze your content and create a structured report with key insights, risks, and action items.
           </p>
         </div>
 
         {/* Divider */}
-        <div className="my-6 border-t-2 border-gray-200"></div>
+        <div className="my-4 sm:my-6 border-t-2 border-gray-200"></div>
 
         {/* Help Text */}
-                 <div className="p-6 bg-gradient-to-br from-neutralharmony-tertiary-50 to-neutralharmony-tertiary-100 border-2 border-neutralharmony-tertiary-300 rounded-xl shadow-lg">
-           <h4 className="font-semibold text-neutralharmony-primary-900 mb-3">What's included in the briefing?</h4>
-           <ul className="text-sm text-neutralharmony-primary-700 space-y-2 list-none">
-             <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
-               Executive summary of key findings
-             </li>
-             <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
-               Main insights and discoveries
-             </li>
-             <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
-               Potential risks and concerns
-             </li>
-             <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
-               Recommended action items
-             </li>
-             <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
-               Source references and citations
-             </li>
-           </ul>
-         </div>
+        <div className="p-4 sm:p-6 bg-gradient-to-br from-neutralharmony-tertiary-50 to-neutralharmony-tertiary-100 border-2 border-neutralharmony-tertiary-300 rounded-xl shadow-lg">
+          <h4 className="font-semibold text-neutralharmony-primary-900 mb-2 sm:mb-3 text-sm sm:text-base">What's included in the briefing?</h4>
+          <ul className="text-xs sm:text-sm text-neutralharmony-primary-700 space-y-1.5 sm:space-y-2 list-none">
+            <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
+              Executive summary of key findings
+            </li>
+            <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
+              Main insights and discoveries
+            </li>
+            <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
+              Potential risks and concerns
+            </li>
+            <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
+              Recommended action items
+            </li>
+            <li className="before:content-['•'] before:text-neutralharmony-primary-700 before:mr-2 before:inline-block">
+              Source references and citations
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 }

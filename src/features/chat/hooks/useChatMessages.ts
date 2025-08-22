@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
 import { aiService } from '@/lib/ai-service';
 import { FileProcessingResult } from '@/types';
 import { AIModel } from '@/lib/model-config';
@@ -61,7 +60,6 @@ export function useChatMessages(processedContent: FileProcessingResult[], curren
   const [lastUserMessage, setLastUserMessage] = useState<string>('');
   const [lastModel, setLastModel] = useState<string>('');
   const [showMockData, setShowMockData] = useState(false);
-  const { toast } = useToast();
 
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
@@ -75,10 +73,6 @@ export function useChatMessages(processedContent: FileProcessingResult[], curren
     if (!content.trim() || isLoading) return;
 
     if (processedContent.length === 0) {
-      toast({
-        title: "No content available",
-        description: "Please upload some documents or URLs first.",
-      });
       return;
     }
 

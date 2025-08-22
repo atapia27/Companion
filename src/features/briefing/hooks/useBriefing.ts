@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
 import { aiService } from '@/lib/ai-service';
 import { FileProcessingResult } from '@/types';
 import { useGlobalModel } from '@/features/navigation/hooks';
@@ -277,14 +276,9 @@ While the system demonstrates good security practices in many areas, critical vu
     ENABLE_MOCK_BRIEFINGS ? mockBriefings : []
   );
   const [isGenerating, setIsGenerating] = useState(false);
-  const { toast } = useToast();
 
   const generateBriefing = async () => {
     if (processedContent.length === 0) {
-      toast({
-        title: "No content available",
-        description: "Please upload some documents or URLs first.",
-      });
       return;
     }
 
@@ -316,7 +310,7 @@ While the system demonstrates good security practices in many areas, critical vu
 
       const newBriefing: Briefing = {
         id: Date.now().toString(),
-        title: model === 'mock-api' ? `Mock Summary - ${new Date().toLocaleDateString()}` : `Briefing - ${new Date().toLocaleDateString()}`,
+        title: model === 'mock-api' ? 'Mock Summary' : 'Summary',
         content: response.answer,
         timestamp: new Date(),
         contentCount: processedContent.length,
@@ -326,18 +320,11 @@ While the system demonstrates good security practices in many areas, critical vu
       
       // The skeleton will be hidden by useEffect in the component
       
-      toast({
-        title: "Briefing generated successfully!",
-        description: "Your comprehensive report is ready.",
-      });
+
 
       return newBriefing;
     } catch (error) {
       console.error('Error generating briefing:', error);
-      toast({
-        title: "Error generating briefing",
-        description: error instanceof Error ? error.message : "Failed to generate briefing",
-      });
       throw error;
     } finally {
       setIsGenerating(false);
@@ -346,10 +333,6 @@ While the system demonstrates good security practices in many areas, critical vu
 
   const deleteBriefing = (id: string) => {
     setBriefings(prev => prev.filter(briefing => briefing.id !== id));
-    toast({
-      title: "Briefing deleted",
-      description: "The briefing has been removed.",
-    });
   };
 
   return {

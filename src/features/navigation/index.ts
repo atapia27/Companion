@@ -1,4 +1,4 @@
-export { Header } from './components/Header';
+export { Navbar } from './components/Navbar';
 export { TabNavigation } from './components/TabNavigation';
 export { AboutModal } from './components/AboutModal';
 export { SettingsModal } from './components/SettingsModal';

@@ -14,24 +14,24 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div
-      className={`flex gap-3 ${
+      className={`flex gap-2 sm:gap-3 ${
         message.type === 'user' ? 'justify-end' : 'justify-start'
       }`}
     >
       {message.type === 'assistant' && (
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-200 to-blue-300 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-          <Brain className="w-5 h-5 text-blue-600" />
+        <div className="w-6 h-6 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-200 to-blue-300 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+          <Brain className="w-3 h-3 sm:w-5 sm:h-5 text-blue-600" />
         </div>
       )}
-      <div className="flex flex-col max-w-[80%]">
+      <div className="flex flex-col max-w-[85%] sm:max-w-[80%]">
         <div
-          className={`p-4 rounded-xl shadow-md ${
+          className={`p-3 sm:p-4 rounded-lg sm:rounded-xl shadow-md ${
             message.type === 'user'
               ? 'bg-gradient-to-r from-neutralharmony-secondary-500 to-neutralharmony-secondary-600'
               : 'bg-white border-2 border-neutralharmony-background-300'
           }`}
         >
-          <div className={`text-sm leading-relaxed prose prose-sm max-w-none ${
+          <div className={`text-xs sm:text-sm leading-relaxed prose prose-sm max-w-none ${
             message.type === 'user' ? 'text-white' : 'text-neutralharmony-primary-900'
           }`}>
             <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -48,8 +48,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
         </div>
       </div>
       {message.type === 'user' && (
-        <div className="w-10 h-10 bg-gradient-to-br from-neutralharmony-contrast-200 to-neutralharmony-contrast-300 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-          <CircleUser className="w-5 h-5 text-neutralharmony-contrast-600" />
+        <div className="w-6 h-6 sm:w-10 sm:h-10 bg-gradient-to-br from-neutralharmony-contrast-200 to-neutralharmony-contrast-300 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+          <CircleUser className="w-3 h-3 sm:w-5 sm:h-5 text-neutralharmony-contrast-600" />
         </div>
       )}
     </div>
